@@ -1,0 +1,10 @@
+.navbar .nav-link {
+  font-weight: 500;
+}
+.navbar .nav-link.active {
+  color: #0d6efd;
+}
+.navbar {
+  padding-top: 0.75rem;  /* ~12px */
+  padding-bottom: 0.75rem;
+}

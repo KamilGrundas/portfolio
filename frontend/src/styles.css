@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+@import "bootstrap/dist/css/bootstrap.min.css";
+:root {
+  /* wysokość nawigacji – dostosuj jeśli zmienisz padding w navbarze */
+  --nav-h: 72px;
+}
+
+/* odsuń całą stronę w dół o wysokość fixa */
+body {
+  padding-top: var(--nav-h);
+  scroll-behavior: smooth; /* przyjemne przewijanie */
+}
+
+/* gdy przewijasz do #sekcji, zatrzymaj nieco poniżej navbara */
+section {
+  scroll-margin-top: calc(var(--nav-h) + 8px);
+}
+
+/* Mobile może mieć nieco niższy navbar */
+@media (max-width: 991.98px) {
+  :root { --nav-h: 64px; }
+}

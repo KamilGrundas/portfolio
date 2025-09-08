@@ -1,0 +1,7 @@
+section { padding: 96px 0; scroll-margin-top: 84px; }
+.container { max-width: 1024px; margin: 0 auto; padding: 0 16px; }
+.lead { font-size: 1.125rem; opacity: .85; }
+/* overview.css */
+#overview img {
+  max-width: 200px;
+}
