@@ -1,0 +1,18 @@
+<section id="skills" class="py-5">
+  <div class="container">
+    <h2 class="fw-bold text-center mb-4">Skills</h2>
+    <div class="row g-4">
+        @for (skill of skills; track $index) {
+      <div class="col-12 col-sm-6 col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body text-center">
+            <h5 class="card-title fw-bold">{{ skill.name }}</h5>
+            <p class="card-text mb-1">Level: {{ skill.level }}</p>
+            <p class="text-muted small">Experience: {{ skill.years }} years</p>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</section>
