@@ -1,0 +1,96 @@
+<section id="contact" class="py-5">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-4">Contact</h2>
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-semibold">Name</label>
+                        <input
+                            id="name"
+                            type="text"
+                            class="form-control"
+                            formControlName="name"
+                            [class.is-invalid]="form.controls.name.touched && form.controls.name.invalid"
+                            autocomplete="name"
+                            required
+                            minlength="2"
+                            aria-describedby="nameHelp nameError"
+                        />
+                        <div id="nameHelp" class="form-text">Enter at least 2 characters.</div>
+                        @if (form.controls.name.touched && form.controls.name.invalid) {
+                            <div id="nameError" class="invalid-feedback">
+                                Please provide your name.
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-semibold">Email</label>
+                        <input
+                            id="email"
+                            type="email"
+                            class="form-control"
+                            formControlName="email"
+                            [class.is-invalid]="form.controls.email.touched && form.controls.email.invalid"
+                            autocomplete="email"
+                            required
+                            aria-describedby="emailError"
+                        />
+                        @if (form.controls.email.touched && form.controls.email.invalid) {
+                            <div id="emailError" class="invalid-feedback">
+                                Please enter a valid email address.
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Message -->
+                    <div class="mb-3">
+                        <label for="message" class="form-label fw-semibold">Message</label>
+                        <textarea
+                            id="message"
+                            rows="6"
+                            class="form-control"
+                            formControlName="message"
+                            [class.is-invalid]="form.controls.message.touched && form.controls.message.invalid"
+                            required
+                            minlength="10"
+                            aria-describedby="messageError"
+                        ></textarea>
+                        @if (form.controls.message.touched && form.controls.message.invalid) {
+                            <div id="messageError" class="invalid-feedback">
+                                Please enter a message (min. 10 characters).
+                            </div>
+                        }
+                    </div>
+
+                    <div class="d-flex gap-2 align-items-center">
+                        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || submitting()">
+                            {{ submitting() ? 'Sending…' : 'Send Message' }}
+                        </button>
+
+                        <a class="btn btn-outline-secondary" href="mailto:john.doe@example.com">
+                            Email Me Directly
+                        </a>
+                    </div>
+
+                    @if (sent()) {
+                        <div class="alert alert-success mt-3" role="status">
+                            Thanks! Your message has been sent.
+                        </div>
+                    }
+                </form>
+
+                <!-- Optional: social links -->
+                <div class="d-flex gap-3 mt-4">
+                    <a class="link-secondary" href="https://github.com/johndoe" target="_blank" rel="noopener">GitHub</a>
+                    <a class="link-secondary" href="https://www.linkedin.com/in/johndoe" target="_blank" rel="noopener">LinkedIn</a>
+                    <a class="link-secondary" href="https://twitter.com/johndoe" target="_blank" rel="noopener">Twitter/X</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
