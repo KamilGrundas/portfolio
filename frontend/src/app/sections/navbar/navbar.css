@@ -1,10 +1,84 @@
-.navbar .nav-link {
+.glass-nav {
+  position: fixed;
+  height: 80px;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  background: transparent !important;
+}
+
+.glass-nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(16px) brightness(var(--glass-brightness, 0.85)) contrast(var(--glass-contrast, 0.95));
+  backdrop-filter: blur(16px) brightness(var(--glass-brightness, 0.85)) contrast(var(--glass-contrast, 0.95));
+  background: transparent;
+  transition: -webkit-backdrop-filter .25s ease, backdrop-filter .25s ease;
+}
+
+.glass-nav::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--glass-tint);
+  border-bottom: none !important;
+}
+
+.glass-nav>.container {
+  position: relative;
+  z-index: 1;
+}
+
+.glass-nav .navbar-brand,
+.glass-nav .nav-link,
+.glass-nav .btn {
+  color: var(--bs-body-color) !important;
+  opacity: 1 !important;
+}
+
+.glass-nav .nav-link {
+  padding-left: 1rem;
+  padding-right: 1rem;
   font-weight: 500;
+  transition: color .2s ease;
 }
-.navbar .nav-link.active {
-  color: #0d6efd;
+
+.glass-nav .nav-link:hover {
+  color: var(--bs-primary) !important;
 }
-.navbar {
-  padding-top: 0.75rem;  /* ~12px */
-  padding-bottom: 0.75rem;
+
+.navbar-toggler {
+  border: 0;
+}
+
+
+.theme-toggle-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color .3s ease, transform .2s ease;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.theme-toggle-btn mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  color: var(--bs-body-color);
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+  background-color: rgba(0, 0, 0, 0.1);
 }

@@ -1,22 +1,70 @@
-/* You can add global styles to this file, and also import other style files */
 @import "bootstrap/dist/css/bootstrap.min.css";
+
 :root {
-  /* wysokość nawigacji – dostosuj jeśli zmienisz padding w navbarze */
   --nav-h: 72px;
 }
 
-/* odsuń całą stronę w dół o wysokość fixa */
-body {
-  padding-top: var(--nav-h);
-  scroll-behavior: smooth; /* przyjemne przewijanie */
+html {
+  scroll-behavior: smooth;
 }
 
-/* gdy przewijasz do #sekcji, zatrzymaj nieco poniżej navbara */
+body {
+  padding-top: var(--nav-h);
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  scroll-behavior: smooth;
+}
+
 section {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
   scroll-margin-top: calc(var(--nav-h) + 8px);
 }
 
-/* Mobile może mieć nieco niższy navbar */
 @media (max-width: 991.98px) {
-  :root { --nav-h: 64px; }
+  :root {
+    --nav-h: 64px;
+  }
+}
+
+[data-bs-theme="light"] {
+  --bs-body-bg: #ffffff;
+  --bs-body-color: #212529;
+  --glass-tint: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(0, 0, 0, 0.10);
+  --glass-brightness: 1.03;
+  --glass-contrast: 1.02;
+}
+
+
+[data-bs-theme="dark"] {
+  --bs-body-bg: rgba(2, 6, 18, 1);
+  --bs-body-color: #f1f5f9;
+  --glass-tint: rgba(2, 6, 18, 0.60);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-brightness: 0.60;
+  --glass-contrast: 0.95;
+}
+
+
+[data-bs-theme="dark"] .card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--bs-body-color);
+}
+
+
+[data-bs-theme="dark"] .navbar {
+  background-color: rgba(2, 6, 18, 0.95) !important;
+  border-bottom: none !important;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
