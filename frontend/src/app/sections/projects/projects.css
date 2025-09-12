@@ -1,0 +1,14 @@
+#projects .card {
+  border-radius: 12px;
+  overflow: hidden; /* żeby obrazek miał zaokrąglenia */
+  transition: transform 0.2s ease;
+}
+
+#projects .card:hover {
+  transform: translateY(-4px);
+}
+
+#projects .card-img-top {
+  object-fit: cover;
+  height: 180px;
+}
