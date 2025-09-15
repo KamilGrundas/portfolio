@@ -42,5 +42,3 @@ def test_token(current_user: CurrentUser) -> Any:
     Test access token
     """
     return current_user
-
-

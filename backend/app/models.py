@@ -1,6 +1,7 @@
 import uuid
 
 from pydantic import EmailStr
+from sqlalchemy import Column, Text
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -9,7 +10,7 @@ class UserBase(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
     is_active: bool = True
     is_superuser: bool = False
-    url: str | None = Field(unique= True, default=None, index = True, max_length=255)
+    url: str | None = Field(unique=True, default=None, index=True, max_length=255)
     full_name: str | None = Field(default=None, max_length=255)
 
 
@@ -40,10 +41,54 @@ class UpdatePassword(SQLModel):
     new_password: str = Field(min_length=8, max_length=40)
 
 
-# Database model, database table inferred from class name
+class UserDetailsBase(SQLModel):
+    title: str | None = Field(default=None, max_length=255)
+    intro: str | None = Field(default=None, max_length=512)
+    avatar: str | None = None
+    about: str | None = Field(default=None, sa_column=Column(Text))
+    extra: str | None = Field(default=None, sa_column=Column(Text))
+    work_station_url: str | None = None
+
+
+class UserDetailsCreate(UserDetailsBase):
+    pass
+
+
+class UserDetailsUpdate(SQLModel):
+    title: str | None = Field(default=None, max_length=255)
+    intro: str | None = Field(default=None, max_length=512)
+    avatar: str | None = None
+    about: str | None = None
+    extra: str | None = None
+    work_station_url: str | None = None
+
+
+class UserDetails(UserDetailsBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    user_id: uuid.UUID = Field(
+        foreign_key="user.id", unique=True, index=True, nullable=False
+    )
+
+    user: "User" = Relationship(back_populates="details")
+
+
+class UserDetailsPublic(UserDetailsBase):
+    id: uuid.UUID
+    user_id: uuid.UUID
+
+
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
+
+    details: UserDetails | None = Relationship(
+        back_populates="user",
+        sa_relationship_kwargs={
+            "uselist": False,
+            "cascade": "all, delete-orphan",
+            "single_parent": True,
+        },
+    )
 
 
 # Properties to return via API, id is always required
