@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserPublic } from '../../types';
+import { UserPublic, UserDetailsPublic } from '../../types';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({
@@ -23,6 +23,11 @@ export class Master {
   // GET /users/by-url/{url}
   getUserByUrl(url: string): Observable<UserPublic> {
     return this.http.get<UserPublic>(`${this.users}/by-url/${encodeURIComponent(url)}`);
+  }
+
+  // GET /users/{uuid}/details
+  getUserDetailsById(userId: string): Observable<UserDetailsPublic> {
+    return this.http.get<UserDetailsPublic>(`${this.users}/${userId}/details`);
   }
 }
 
