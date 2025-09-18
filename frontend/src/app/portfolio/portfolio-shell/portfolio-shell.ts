@@ -6,7 +6,7 @@ import { inject, signal } from '@angular/core';
 import { Master } from '../../core/services/master';
 import { UserPublic, UserDetailsPublic } from '../../types';
 import { Overview, OverviewData } from '../../sections/overview/overview';
-import { Navbar } from '../../sections/navbar/navbar';
+import { Navbar, NavbarData } from '../../sections/navbar/navbar';
 import { About } from '../../sections/about/about';
 import { Skills } from '../../sections/skills/skills';
 import { Experience } from '../../sections/experience/experience';
@@ -15,11 +15,7 @@ import { Certificates } from '../../sections/certificates/certificates';
 import { Contact } from '../../sections/contact/contact';
 import { Footer } from '../../sections/footer/footer';
 import { Projects } from '../../sections/projects/projects';
-import {
-  JOHN_DOE_USER,
-  JOHN_DOE_DETAILS,
-  buildOverviewData,
-} from '../../shared/defaults/porfolio-defaults';
+import { JOHN_DOE_USER, JOHN_DOE_DETAILS } from '../../shared/defaults/porfolio-defaults';
 
 @Component({
   selector: 'app-portfolio-shell',
@@ -48,8 +44,12 @@ export class PortfolioShell {
   error = signal<string | null>(null);
   loading = signal<boolean>(true);
 
+  navbarData = computed<NavbarData>(() => ({
+    name: (this.user()?.full_name ?? JOHN_DOE_USER.full_name) as string,
+  }));
+
   overviewData = computed<OverviewData>(() => ({
-    name: (this.user()?.full_name ?? this.user()?.email ?? JOHN_DOE_USER.full_name) as string,
+    name: (this.user()?.full_name ?? JOHN_DOE_USER.full_name) as string,
     title: (this.details()?.title ?? JOHN_DOE_DETAILS.title) as string,
     intro: (this.details()?.intro ?? JOHN_DOE_DETAILS.intro) as string,
     avatar: (this.details()?.avatar ?? JOHN_DOE_DETAILS.avatar) as string,
