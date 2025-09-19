@@ -1,15 +1,36 @@
 <section id="skills" class="py-5">
   <div class="container">
     <h2 class="fw-bold text-center mb-4">Skills</h2>
-    <div class="row g-4">
-        @for (skill of skills; track $index) {
-      <div class="col-12 col-sm-6 col-lg-4">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body text-center">
-            <h5 class="card-title fw-bold">{{ skill.name }}</h5>
-            <p class="card-text mb-1">Level: {{ skill.level }}</p>
-            <p class="text-muted small">Experience: {{ skill.years }} years</p>
+
+    <div class="row g-4 align-items-start">
+
+      @for (cat of categories; track trackByTitle($index, cat)) {
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="skill-card" [style.--accent]="cat.color" (click)="toggle(cat)" role="button" tabindex="0">
+          <div class="card-top">
+            <div class="icon-ring">
+              <mat-icon class="skill-icon">{{ cat.icon }}</mat-icon>
+            </div>
+
+            <div class="title">
+              {{ cat.title }}
+            </div>
+
+            <mat-icon class="chev" [class.open]="cat.open">expand_more</mat-icon>
+            <span class="dot"></span>
           </div>
+
+          <div class="content" [class.open]="cat.open">
+            <div class="content-inner">
+              <div class="items">
+                @for (tech of cat.items; track $index) {
+                <span class="skill-item">{{ tech }}</span>
+                }
+              </div>
+            </div>
+          </div>
+
+
         </div>
       </div>
       }
