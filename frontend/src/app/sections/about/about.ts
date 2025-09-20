@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
-type AboutData = {
+export type AboutData = {
   heading: string;
   about: string;
   extra: string;
@@ -12,13 +12,8 @@ type AboutData = {
   imports: [],
   templateUrl: './about.html',
   styleUrl: './about.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class About {
-  data: AboutData = {
-    heading: 'About Me',
-    about: "I'm John Doe, a frontend developer with a passion for building modern, performant, and user-friendly applications. I specialize in Angular and TypeScript, and I love working on projects that make a difference.",
-    extra: "Beyond coding, I enjoy contributing to open source, writing technical articles, and mentoring new developers.",
-    image: 'https://www.flexjobs.com/blog/wp-content/uploads/2020/04/20044602/Organize-Workspace.png?w=1024',
-  };
+  data = input.required<AboutData>();
 }

@@ -7,7 +7,7 @@ import { Master } from '../../core/services/master';
 import { UserPublic, UserDetailsPublic } from '../../types';
 import { Overview, OverviewData } from '../../sections/overview/overview';
 import { Navbar, NavbarData } from '../../sections/navbar/navbar';
-import { About } from '../../sections/about/about';
+import { About, AboutData } from '../../sections/about/about';
 import { Skills } from '../../sections/skills/skills';
 import { Experience } from '../../sections/experience/experience';
 import { Education } from '../../sections/education/education';
@@ -53,6 +53,13 @@ export class PortfolioShell {
     title: (this.details()?.title ?? JOHN_DOE_DETAILS.title) as string,
     intro: (this.details()?.intro ?? JOHN_DOE_DETAILS.intro) as string,
     avatar: (this.details()?.avatar ?? JOHN_DOE_DETAILS.avatar) as string,
+  }));
+
+  aboutData = computed<AboutData>(() => ({
+    heading: 'About Me',
+    about: (this.details()?.about ?? JOHN_DOE_DETAILS.about) as string,
+    extra: (this.details()?.extra ?? JOHN_DOE_DETAILS.extra) as string,
+    image: (this.details()?.work_station_url ?? JOHN_DOE_DETAILS.work_station_url) as string,
   }));
 
   readonly flow$ = this.route.paramMap
