@@ -1,7 +1,7 @@
 import uuid
 
 from pydantic import EmailStr
-from sqlalchemy import Column, Text
+from sqlalchemy import Column, Text, UniqueConstraint
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -110,3 +110,109 @@ class Token(SQLModel):
 # Contents of JWT token
 class TokenPayload(SQLModel):
     sub: str | None = None
+
+
+class SkillCategoryBase(SQLModel):
+    title: str = Field(max_length=255, index=True)
+    icon: str | None = Field(default=None, max_length=64)
+    color: str | None = Field(default=None, max_length=16)
+    order: int | None = Field(default=None)
+
+
+class SkillBase(SQLModel):
+    name: str = Field(max_length=255, index=True)
+    order: int | None = Field(default=None)
+
+
+class SkillCategoryCreate(SkillCategoryBase):
+    pass
+
+
+class SkillCategoryUpdate(SQLModel):
+    title: str | None = Field(default=None, max_length=255)
+    icon: str | None = Field(default=None, max_length=64)
+    color: str | None = Field(default=None, max_length=16)
+    order: int | None = None
+
+
+class SkillCreate(SkillBase):
+    pass
+
+
+class SkillUpdate(SQLModel):
+    name: str | None = Field(default=None, max_length=255)
+    order: int | None = None
+
+
+class SkillCategoryLink(SQLModel, table=True):
+    __tablename__ = "skill_category_link"
+    __table_args__ = (
+        UniqueConstraint("skill_id", "category_id", name="uq_skill_category_pair"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+
+    user_id: uuid.UUID = Field(foreign_key="user.id", index=True, nullable=False)
+
+    skill_id: uuid.UUID = Field(foreign_key="skill.id", index=True, nullable=False)
+    category_id: uuid.UUID = Field(
+        foreign_key="skillcategory.id", index=True, nullable=False
+    )
+
+
+class SkillCategory(SkillCategoryBase, table=True):
+    __tablename__ = "skillcategory"
+    __table_args__ = (
+        UniqueConstraint("user_id", "title", name="uq_skillcategory_user_title"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    user_id: uuid.UUID = Field(foreign_key="user.id", index=True, nullable=False)
+
+    skills: list["Skill"] = Relationship(
+        back_populates="categories",
+        link_model=SkillCategoryLink,
+        sa_relationship_kwargs={"lazy": "selectin"},
+    )
+
+    user: User | None = Relationship()
+
+
+class Skill(SkillBase, table=True):
+    __tablename__ = "skill"
+    __table_args__ = (UniqueConstraint("user_id", "name", name="uq_skill_user_name"),)
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    user_id: uuid.UUID = Field(foreign_key="user.id", index=True, nullable=False)
+
+    categories: list[SkillCategory] = Relationship(
+        back_populates="skills",
+        link_model=SkillCategoryLink,
+        sa_relationship_kwargs={"lazy": "selectin"},
+    )
+
+    user: User | None = Relationship()
+
+
+class SkillPublic(SkillBase):
+    id: uuid.UUID
+    user_id: uuid.UUID
+
+
+class SkillCategoryPublic(SkillCategoryBase):
+    id: uuid.UUID
+    user_id: uuid.UUID
+
+
+class SkillCategoryWithSkills(SkillCategoryPublic):
+    skills: list[SkillPublic] = []
+
+
+class SkillsPublic(SQLModel):
+    data: list[SkillPublic]
+    count: int
+
+
+class SkillCategoriesPublic(SQLModel):
+    data: list[SkillCategoryPublic]
+    count: int
