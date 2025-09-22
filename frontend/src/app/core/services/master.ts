@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserPublic, UserDetailsPublic } from '../../types';
+import { UserPublic, UserDetailsPublic, SkillCategory } from '../../types';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class Master {
-    
   private readonly base = environment.apiUrl;
   private readonly users = `${this.base}users`;
 
-  constructor(private http: HttpClient ) { }
-
+  constructor(private http: HttpClient) {}
 
   // GET /users/by-id/{uuid}
   getUserById(userId: string): Observable<UserPublic> {
@@ -29,5 +27,9 @@ export class Master {
   getUserDetailsById(userId: string): Observable<UserDetailsPublic> {
     return this.http.get<UserDetailsPublic>(`${this.users}/${userId}/details`);
   }
-}
 
+  // GET /users/{uuid}/skill-categories
+  getUserSkillsById(userId: string): Observable<SkillCategory[]> {
+    return this.http.get<SkillCategory[]>(`${this.users}/${userId}/skill-categories`);
+  }
+}

@@ -20,3 +20,10 @@ export interface UserDetailsPublic extends UserDetailsBase {
   id: string;
   user_id: string;
 }
+
+export interface SkillCategory {
+  title: string;
+  icon: string;
+  color: string;
+  items: string[];
+}

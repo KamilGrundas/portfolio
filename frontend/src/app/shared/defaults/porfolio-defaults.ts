@@ -1,4 +1,4 @@
-import { UserPublic, UserDetailsPublic } from '../../types';
+import { UserPublic, UserDetailsPublic, SkillCategory } from '../../types';
 
 export const JOHN_DOE_USER: UserPublic = {
   id: '0',
@@ -24,11 +24,35 @@ export const JOHN_DOE_DETAILS: UserDetailsPublic = {
     'https://www.flexjobs.com/blog/wp-content/uploads/2020/04/20044602/Organize-Workspace.png?w=1024',
 };
 
-export function buildOverviewData(user: UserPublic | null, details: UserDetailsPublic | null) {
-  return {
-    name: user?.full_name ?? user?.email ?? JOHN_DOE_USER.full_name,
-    title: details?.title ?? JOHN_DOE_DETAILS.title,
-    intro: details?.intro ?? JOHN_DOE_DETAILS.intro,
-    avatar: details?.avatar ?? JOHN_DOE_DETAILS.avatar,
-  };
-}
+export const JOHN_DOE_SKILLS: SkillCategory[] = [
+  {
+    title: 'Programming Languages',
+    icon: 'code',
+    color: '#22c55e',
+    items: ['Python', 'C++', 'SQL', 'JavaScript', 'HTML', 'CSS', 'R', 'MATLAB'],
+  },
+  {
+    title: 'Machine Learning & AI',
+    icon: 'psychology',
+    color: '#60a5fa',
+    items: ['Scikit-learn', 'XGBoost', 'LightGBM', 'TensorFlow', 'PyTorch'],
+  },
+  {
+    title: 'Data Science',
+    icon: 'insights',
+    color: '#f59e0b',
+    items: ['Pandas', 'NumPy', 'Statsmodels'],
+  },
+  {
+    title: 'Data Visualisation',
+    icon: 'bar_chart',
+    color: '#a78bfa',
+    items: ['Power BI', 'matplotlib', 'seaborn', 'Plotly'],
+  },
+  {
+    title: 'Cloud & MLOps',
+    icon: 'cloud',
+    color: '#c084fc',
+    items: ['Docker', 'GitHub Actions', 'Azure', 'MLflow'],
+  },
+];
