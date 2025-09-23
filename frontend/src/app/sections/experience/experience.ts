@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 
 type WorkExperience = {
   company: string;
@@ -11,7 +12,7 @@ type WorkExperience = {
 
 @Component({
   selector: 'app-experience',
-  imports: [],
+  imports: [MatIconModule],
   templateUrl: './experience.html',
   styleUrl: './experience.css',
   changeDetection: ChangeDetectionStrategy.OnPush
