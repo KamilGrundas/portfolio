@@ -21,9 +21,14 @@ export interface UserDetailsPublic extends UserDetailsBase {
   user_id: string;
 }
 
-export interface SkillCategory {
-  title: string;
+export interface Skill {
+  name: string;
+  order?: number;
+}
+
+export interface UserSkillsByCategory {
+  name: string;
   icon: string;
   color: string;
-  items: string[];
+  skills: Array<Skill>;
 }

@@ -1,4 +1,4 @@
-import { UserPublic, UserDetailsPublic, SkillCategory } from '../../types';
+import { UserPublic, UserDetailsPublic, UserSkillsByCategory } from '../../types';
 
 export const JOHN_DOE_USER: UserPublic = {
   id: '0',
@@ -24,35 +24,64 @@ export const JOHN_DOE_DETAILS: UserDetailsPublic = {
     'https://www.flexjobs.com/blog/wp-content/uploads/2020/04/20044602/Organize-Workspace.png?w=1024',
 };
 
-export const JOHN_DOE_SKILLS: SkillCategory[] = [
+export const JOHN_DOE_SKILLS: UserSkillsByCategory[] = [
   {
-    title: 'Programming Languages',
+    name: 'Programming Languages',
     icon: 'code',
     color: '#22c55e',
-    items: ['Python', 'C++', 'SQL', 'JavaScript', 'HTML', 'CSS', 'R', 'MATLAB'],
+    skills: [
+      { name: 'Python', order: 1 },
+      { name: 'C++', order: 2 },
+      { name: 'SQL', order: 3 },
+      { name: 'JavaScript', order: 4 },
+      { name: 'HTML', order: 5 },
+      { name: 'CSS', order: 6 },
+      { name: 'R', order: 7 },
+      { name: 'MATLAB', order: 8 },
+    ],
   },
   {
-    title: 'Machine Learning & AI',
+    name: 'Machine Learning & AI',
     icon: 'psychology',
     color: '#60a5fa',
-    items: ['Scikit-learn', 'XGBoost', 'LightGBM', 'TensorFlow', 'PyTorch'],
+    skills: [
+      { name: 'Scikit-learn', order: 1 },
+      { name: 'XGBoost', order: 2 },
+      { name: 'LightGBM', order: 3 },
+      { name: 'TensorFlow', order: 4 },
+      { name: 'PyTorch', order: 5 },
+    ],
   },
   {
-    title: 'Data Science',
+    name: 'Data Science',
     icon: 'insights',
     color: '#f59e0b',
-    items: ['Pandas', 'NumPy', 'Statsmodels'],
+    skills: [
+      { name: 'Pandas', order: 1 },
+      { name: 'NumPy', order: 2 },
+      { name: 'Statsmodels', order: 3 },
+    ],
   },
   {
-    title: 'Data Visualisation',
+    name: 'Data Visualisation',
     icon: 'bar_chart',
     color: '#a78bfa',
-    items: ['Power BI', 'matplotlib', 'seaborn', 'Plotly'],
+    skills: [
+      { name: 'Power BI', order: 1 },
+      { name: 'matplotlib', order: 2 },
+      { name: 'seaborn', order: 3 },
+      { name: 'Plotly', order: 4 },
+    ],
   },
   {
-    title: 'Cloud & MLOps',
+    name: 'Cloud & MLOps',
     icon: 'cloud',
     color: '#c084fc',
-    items: ['Docker', 'GitHub Actions', 'Azure', 'MLflow'],
+    skills: [
+      { name: 'Docker', order: 1 },
+      { name: 'GitHub Actions', order: 2 },
+      { name: 'Azure', order: 3 },
+      { name: 'MLflow', order: 4 },
+    ],
   },
 ];

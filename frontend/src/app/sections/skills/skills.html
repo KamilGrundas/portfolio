@@ -13,7 +13,7 @@
             </div>
 
             <div class="title">
-              {{ cat.title }}
+              {{ cat.name }}
             </div>
 
             <mat-icon class="chev" [class.open]="cat.open">expand_more</mat-icon>
@@ -23,8 +23,8 @@
           <div class="content" [class.open]="cat.open">
             <div class="content-inner">
               <div class="items">
-                @for (tech of cat.items; track $index) {
-                <span class="skill-item">{{ tech }}</span>
+                @for (tech of cat.skills; track $index) {
+                <span class="skill-item">{{ tech.name }}</span>
                 }
               </div>
             </div>

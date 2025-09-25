@@ -14,7 +14,7 @@ import { UserPublic, UserDetailsPublic } from '../../types';
 import { Overview, OverviewData } from '../../sections/overview/overview';
 import { Navbar, NavbarData } from '../../sections/navbar/navbar';
 import { About, AboutData } from '../../sections/about/about';
-import { Skills, SkillCategory } from '../../sections/skills/skills';
+import { Skills, SkillsData } from '../../sections/skills/skills';
 import { Experience } from '../../sections/experience/experience';
 import { Education } from '../../sections/education/education';
 import { Certificates } from '../../sections/certificates/certificates';
@@ -51,10 +51,9 @@ export class PortfolioShell {
   private readonly api = inject(Master);
   private readonly destroyRef = inject(DestroyRef);
 
-  // Startujemy z sensownymi wartościami domyślnymi, żeby unikać NG0950 w dzieciach.
   user = signal<UserPublic>(JOHN_DOE_USER);
   details = signal<UserDetailsPublic>(JOHN_DOE_DETAILS);
-  skills = signal<SkillCategory[]>(JOHN_DOE_SKILLS);
+  skills = signal<SkillsData[]>(JOHN_DOE_SKILLS);
 
   error = signal<string | null>(null);
   loading = signal<boolean>(true);
@@ -77,7 +76,7 @@ export class PortfolioShell {
     image: (this.details()?.work_station_url || JOHN_DOE_DETAILS.work_station_url) as string,
   }));
 
-  skillsData = computed<SkillCategory[]>(() => {
+  skillsData = computed<SkillsData[]>(() => {
     const list = this.skills();
     return Array.isArray(list) && list.length > 0 ? list : JOHN_DOE_SKILLS;
   });

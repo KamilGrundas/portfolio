@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { UserSkillsByCategory } from '../../types';
 
-export interface SkillCategory {
-  title: string;
-  icon: string;
-  color: string;
-  items: string[];
+export interface Skill {
+  name: string;
+  order?: number;
+}
+
+export interface SkillsData extends UserSkillsByCategory {
   open?: boolean;
 }
 
@@ -18,11 +20,11 @@ export interface SkillCategory {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Skills {
-  categories = input.required<SkillCategory[]>();
+  categories = input.required<SkillsData[]>();
 
-  toggle(cat: SkillCategory) {
+  toggle(cat: SkillsData) {
     cat.open = !cat.open;
   }
 
-  trackByTitle = (_: number, c: SkillCategory) => c.title;
+  trackByTitle = (_: number, c: SkillsData) => c.name;
 }
