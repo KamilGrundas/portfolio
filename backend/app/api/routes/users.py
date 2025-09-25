@@ -3,7 +3,7 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import col, func, select
-
+from sqlalchemy.orm import selectinload
 from app.api.deps import (
     CurrentUser,
     SessionDep,
@@ -17,6 +17,8 @@ from app.models import (
     UserDetails,
     UserDetailsUpdate,
     UserDetailsPublic,
+    SkillCategory,
+    UserSkillsByCategory,
 )
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -37,7 +39,7 @@ def read_users(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     statement = select(User).offset(skip).limit(limit)
     users = session.exec(statement).all()
 
-    return UsersPublic(data=users, count=count)
+    return UsersPublic(data=users, count=count)  # type: ignore
 
 
 @router.get("/me", response_model=UserPublic)
@@ -165,3 +167,43 @@ def upsert_user_details_by_id(
     session.commit()
     session.refresh(details)
     return details
+
+
+@router.get("/get-user-skills", response_model=list[UserSkillsByCategory])
+def get_user_skills(
+    session: SessionDep,
+    user_id: uuid.UUID,
+) -> Any:
+    """
+    Get current user's skills.
+    """
+    categories = session.exec(
+        select(SkillCategory)
+        .options(selectinload(SkillCategory.skills))  # type: ignore
+        .order_by(
+            SkillCategory.order.is_(None),  # type: ignore
+            SkillCategory.order,  # type: ignore
+            SkillCategory.name,  # type: ignore
+        )
+    ).all()
+    result: list[dict] = []
+    for category in categories:
+        user_skills = [s for s in category.skills if s.owner_id == user_id]
+        if not user_skills:
+            continue
+
+        result.append(
+            {
+                "id": category.id,
+                "name": category.name,
+                "icon": category.icon,
+                "color": category.color,
+                "order": category.order or 0,
+                "skills": [
+                    {"id": s.id, "name": s.name}
+                    for s in sorted(user_skills, key=lambda x: x.name.lower())
+                ],
+            }
+        )
+
+    return result
