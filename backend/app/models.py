@@ -5,6 +5,15 @@ from sqlalchemy import Column, Text
 from sqlmodel import Field, Relationship, SQLModel
 
 
+class WorkExperienceSkillLink(SQLModel, table=True):
+    work_experience_id: uuid.UUID | None = Field(
+        default_factory=uuid.uuid4, foreign_key="workexperience.id", primary_key=True
+    )
+    skill_id: uuid.UUID | None = Field(
+        default_factory=uuid.uuid4, foreign_key="skill.id", primary_key=True
+    )
+
+
 # Shared properties
 class UserBase(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
@@ -90,6 +99,7 @@ class User(UserBase, table=True):
         },
     )
     skills: list["Skill"] = Relationship(back_populates="owner")  # type: ignore
+    work_experience: list["WorkExperience"] = Relationship(back_populates="owner")  # type: ignore
 
 
 # Properties to return via API, id is always required
@@ -138,6 +148,10 @@ class Skill(SkillBase, table=True):
     category: SkillCategory | None = Relationship(back_populates="skills")
     owner_id: uuid.UUID | None = Field(foreign_key="user.id", default=None, index=True)
     owner: User | None = Relationship(back_populates="skills")
+    experiences: list["WorkExperience"] = Relationship(
+        back_populates="skills",
+        link_model=WorkExperienceSkillLink,
+    )
 
 
 class SkillCreate(SkillBase):
@@ -168,3 +182,31 @@ class UserSkillsByCategory(SQLModel):
     color: str | None
     order: int
     skills: list[SkillBase] = []
+
+
+class ExperienceHighlightBase(SQLModel):
+    text: str | None = Field(default=None, sa_column=Column(Text))
+    work_experience_id: uuid.UUID | None = Field(
+        foreign_key="workexperience.id", default=None, index=True, nullable=False
+    )
+
+
+class ExperienceHighlight(ExperienceHighlightBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+
+
+class WorkExperienceBase(SQLModel):
+    company: str | None = Field(default=None, max_length=255)
+    role: str | None = Field(default=None, max_length=100)
+    period: str | None = Field(default=None, max_length=100)
+    location: str | None = Field(default=None, max_length=100)
+
+
+class WorkExperience(WorkExperienceBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    owner_id: uuid.UUID | None = Field(foreign_key="user.id", default=None, index=True)
+    owner: User | None = Relationship(back_populates="work_experience")
+    skills: list["Skill"] = Relationship(
+        back_populates="experiences",
+        link_model=WorkExperienceSkillLink,
+    )
