@@ -3,7 +3,6 @@
     <h2 class="fw-bold text-center mb-4">Skills</h2>
 
     <div class="row g-4 align-items-start">
-
       @for (cat of categories(); track trackByTitle($index, cat)) {
       <div class="col-12 col-md-6 col-lg-4">
         <div class="skill-card" [style.--accent]="cat.color" (click)="toggle(cat)" role="button" tabindex="0">
@@ -29,8 +28,6 @@
               </div>
             </div>
           </div>
-
-
         </div>
       </div>
       }

@@ -67,6 +67,7 @@
   }
 }
 
+/* ---- Znaczek okresu zatrudnienia ---- */
 .period {
   --p: var(--bs-primary);
   --bg: color-mix(in srgb, var(--p) 14%, transparent);
@@ -96,6 +97,7 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 .25rem .75rem rgba(0, 0, 0, .45), 0 0 0 1px color-mix(in srgb, var(--p) 22%, transparent)
 }
 
+/* ---- Bullets ---- */
 .bullets li {
   display: flex;
   align-items: center;
@@ -116,4 +118,66 @@
 
 .bullets li+li {
   margin-top: .125rem
+}
+
+/* =======================================================
+   Efekt powiększenia i niebieskiej poświaty (hover + focus)
+   Stosujemy do .card poprzez klasę .hover-card
+   ======================================================= */
+.card.hover-card{
+  position: relative;                 /* dla ::after */
+  isolation: isolate;                 /* własny stacking context (poświata ponad sąsiadami) */
+  transform-origin: center center;
+  transition: transform .2s ease, box-shadow .2s ease, outline-color .2s ease, outline-offset .2s ease;
+  outline: 0 solid transparent;
+  will-change: transform, box-shadow;
+}
+
+/* niebieski ring + poświata */
+.card.hover-card::after{
+  content: "";
+  position: absolute;
+  inset: -2px;                        /* lekki „ring” na zewnątrz */
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s ease, box-shadow .2s ease;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--bs-primary) 55%, transparent),
+    0 0 28px color-mix(in srgb, var(--bs-primary) 45%, transparent);
+}
+
+/* Hover: powiększenie bez przesuwania */
+.card.hover-card:hover{
+  transform: scale(1.015);
+  box-shadow: 0 .75rem 2rem rgba(0,0,0,.10);
+}
+.card.hover-card:hover::after{ opacity: 1; }
+
+/* Focus klawiatury: ten sam efekt + wyraźny outline */
+.card.hover-card:focus-visible{
+  transform: scale(1.015);
+  outline: 2px solid color-mix(in srgb, var(--bs-primary) 70%, transparent);
+  outline-offset: 2px;
+  box-shadow: 0 .75rem 2rem rgba(0,0,0,.10);
+}
+.card.hover-card:focus-visible::after{ opacity: 1; }
+
+/* Ciemny motyw – mocniejsza poświata */
+@media (prefers-color-scheme: dark){
+  .card.hover-card:hover,
+  .card.hover-card:focus-visible{
+    box-shadow: 0 .75rem 2rem rgba(0,0,0,.45);
+  }
+  .card.hover-card::after{
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--bs-primary) 65%, transparent),
+      0 0 34px color-mix(in srgb, var(--bs-primary) 55%, transparent);
+  }
+}
+
+/* Ograniczony ruch */
+@media (prefers-reduced-motion: reduce){
+  .card.hover-card{ transition: none; }
+  .card.hover-card::after{ transition: none; }
 }

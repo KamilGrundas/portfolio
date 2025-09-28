@@ -4,13 +4,10 @@
 
     <div class="position-relative">
       @for (exp of experiences; track $index) {
-      <article class="card shadow-sm border-0 mb-4">
+      <article class="card hover-card shadow-sm border-0 mb-4" tabindex="0">
         <div class="card-body p-4">
           <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
             <div class="d-flex align-items-start gap-3">
-
-
-
               <h5 class="card-title mb-1">{{ exp.role }}</h5>
 
               <div class="text-muted small d-flex flex-wrap gap-3">
@@ -26,7 +23,6 @@
                 </span>
                 }
               </div>
-
             </div>
 
             <span class="period badge rounded-pill d-inline-flex align-items-center">
