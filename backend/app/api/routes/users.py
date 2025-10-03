@@ -17,8 +17,14 @@ from app.models import (
     UserDetails,
     UserDetailsUpdate,
     UserDetailsPublic,
-    SkillCategory,
+    Skill,
+    SkillWithCategory,
+    SkillCategoryPublic,
+    UserWorkExperience,
+    WorkExperience,
+    ExperienceHighlight,
     UserSkillsByCategory,
+    SkillCategory,
 )
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -175,7 +181,7 @@ def get_user_skills(
     user_id: uuid.UUID,
 ) -> Any:
     """
-    Get current user's skills.
+    Get user's skills.
     """
     categories = session.exec(
         select(SkillCategory)
@@ -204,6 +210,70 @@ def get_user_skills(
                     for s in sorted(user_skills, key=lambda x: x.name.lower())
                 ],
             }
+        )
+
+    return result
+
+
+@router.get(
+    "/get-user-work-experience",
+    response_model=list[UserWorkExperience],
+)
+def get_user_work_experience(
+    session: SessionDep,
+    user_id: uuid.UUID,
+) -> Any:
+    """
+    Get user's work experience.
+    """
+    experiences = session.exec(
+        select(WorkExperience)
+        .where(col(WorkExperience.owner_id) == user_id)
+        .options(
+            selectinload(WorkExperience.skills).selectinload(Skill.category)  # type: ignore
+        )
+    ).all()
+
+    result: list[UserWorkExperience] = []
+
+    for exp in experiences:
+        highlights = session.exec(
+            select(ExperienceHighlight).where(
+                col(ExperienceHighlight.work_experience_id) == exp.id
+            )
+        ).all()
+
+        skills_with_cat: list[SkillWithCategory] = []
+        for s in exp.skills:
+            cat_public = (
+                SkillCategoryPublic(
+                    id=s.category.id,
+                    name=s.category.name,
+                    icon=s.category.icon,
+                    color=s.category.color,
+                    order=s.category.order or 0,
+                )
+                if s.category
+                else None
+            )
+            skills_with_cat.append(
+                SkillWithCategory(
+                    id=s.id,
+                    name=s.name,
+                    order=s.order or 0,
+                    category=cat_public,
+                )
+            )
+
+        result.append(
+            UserWorkExperience(
+                company=exp.company or "",
+                role=exp.role or "",
+                period=exp.period or "",
+                location=exp.location or "",
+                highlights=highlights,  # type: ignore
+                skills=skills_with_cat,
+            )
         )
 
     return result

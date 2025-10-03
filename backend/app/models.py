@@ -210,3 +210,23 @@ class WorkExperience(WorkExperienceBase, table=True):
         back_populates="experiences",
         link_model=WorkExperienceSkillLink,
     )
+
+
+class SkillCategoryPublic(SkillCategoryBase):
+    id: uuid.UUID
+
+
+class SkillWithCategory(SQLModel):
+    id: uuid.UUID
+    name: str
+    order: int = 0
+    category: SkillCategoryPublic | None = None
+
+
+class UserWorkExperience(SQLModel):
+    company: str
+    role: str
+    period: str
+    location: str
+    highlights: list[ExperienceHighlight] = []
+    skills: list[SkillWithCategory] = []
