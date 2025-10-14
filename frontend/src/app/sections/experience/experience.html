@@ -3,7 +3,7 @@
     <h2 class="fw-bold text-center mb-4">Proffesional Experience</h2>
 
     <div class="position-relative">
-      @for (exp of experiences; track $index) {
+      @for (exp of experiences(); track $index) {
       <article class="card hover-card shadow-sm border-0 mb-4" tabindex="0">
         <div class="card-body p-4">
           <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
@@ -32,22 +32,24 @@
           </div>
 
           <ul class="mt-3 mb-2 list-unstyled bullets">
-            @for (b of exp.bullets; track $index) {
+            @for (b of exp.highlights; track $index) {
             <li class="d-flex align-items-center gap-2 mb-1">
               <mat-icon inline class="bullet-icon text-primary" fontIcon="chevron_right"></mat-icon>
-              <span class="bullet-text">{{ b }}</span>
+              <span class="bullet-text">{{ b.text }}</span>
             </li>
             }
           </ul>
 
-          @if (exp.tech?.length) {
+          @if (exp.skills?.length) {
           <div class="d-flex flex-wrap gap-2 mt-3">
-            @for (t of exp.tech; track $index) {
-            <span class="chip d-inline-flex align-items-center gap-1">
-              <mat-icon inline fontIcon="code"></mat-icon> {{ t }}
+            @for (t of exp.skills; track $index) {
+            <span class="chip d-inline-flex align-items-center gap-1" [style.--accent]="t.category.color || '#6c757d'"
+              title="{{ t.category.name || '' }}">
+              <mat-icon inline>{{ t.category.icon }}</mat-icon> {{ t.name }}
             </span>
             }
           </div>
+
           }
         </div>
       </article>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserPublic, UserDetailsPublic, UserSkillsByCategory } from '../../types';
+import { UserPublic, UserDetailsPublic, UserSkillsByCategory, UserWorkExperience } from '../../types';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({
@@ -31,5 +31,10 @@ export class Master {
   // GET /users/{uuid}/skill-categories
   getUserSkillsById(userId: string): Observable<UserSkillsByCategory[]> {
     return this.http.get<UserSkillsByCategory[]>(`${this.users}/get-user-skills?user_id=${userId}`);
+  }
+
+  // GET /users/{uuid}/skill-categories
+  getUserWorkExperienceById(userId: string): Observable<UserWorkExperience[]> {
+    return this.http.get<UserWorkExperience[]>(`${this.users}/get-user-work-experience?user_id=${userId}`);
   }
 }

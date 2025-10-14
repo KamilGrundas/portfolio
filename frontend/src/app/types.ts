@@ -32,3 +32,28 @@ export interface UserSkillsByCategory {
   color: string;
   skills: Array<Skill>;
 }
+
+export interface SkillWithCategory {
+  id: string;
+  name: string;
+  order: number;
+  category: {
+    name: string;
+    icon: string;
+    color: string;
+  };
+}
+
+export interface ExperienceHighlight {
+  text: string;
+}
+
+export interface UserWorkExperience {
+  id: string;
+  company: string;
+  role: string;
+  period: string;
+  location: string;
+  highlights: ExperienceHighlight[];
+  skills?: SkillWithCategory[];
+}

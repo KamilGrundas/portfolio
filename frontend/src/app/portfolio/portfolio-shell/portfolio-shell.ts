@@ -10,7 +10,12 @@ import { ActivatedRoute } from '@angular/router';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { EMPTY, forkJoin, of } from 'rxjs';
 import { Master } from '../../core/services/master';
-import { UserPublic, UserDetailsPublic } from '../../types';
+import {
+  UserPublic,
+  UserDetailsPublic,
+  UserSkillsByCategory,
+  UserWorkExperience,
+} from '../../types';
 import { Overview, OverviewData } from '../../sections/overview/overview';
 import { Navbar, NavbarData } from '../../sections/navbar/navbar';
 import { About, AboutData } from '../../sections/about/about';
@@ -25,6 +30,7 @@ import {
   JOHN_DOE_USER,
   JOHN_DOE_DETAILS,
   JOHN_DOE_SKILLS,
+  JOHN_DOE_WORK_EXPERIENCE,
 } from '../../shared/defaults/porfolio-defaults';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -53,7 +59,8 @@ export class PortfolioShell {
 
   user = signal<UserPublic>(JOHN_DOE_USER);
   details = signal<UserDetailsPublic>(JOHN_DOE_DETAILS);
-  skills = signal<SkillsData[]>(JOHN_DOE_SKILLS);
+  skills = signal<UserSkillsByCategory[]>(JOHN_DOE_SKILLS);
+  workExperience = signal<UserWorkExperience[]>(JOHN_DOE_WORK_EXPERIENCE);
 
   error = signal<string | null>(null);
   loading = signal<boolean>(true);
@@ -81,6 +88,11 @@ export class PortfolioShell {
     return Array.isArray(list) && list.length > 0 ? list : JOHN_DOE_SKILLS;
   });
 
+  experienceData = computed<UserWorkExperience[]>(() => {
+    const list = this.workExperience();
+    return Array.isArray(list) && list.length > 0 ? list : JOHN_DOE_WORK_EXPERIENCE;
+  });
+
   readonly flow$ = this.route.paramMap
     .pipe(
       map((pm) => pm.get('user_url')!),
@@ -98,12 +110,20 @@ export class PortfolioShell {
             .getUserDetailsById(user.id)
             .pipe(catchError(() => of(JOHN_DOE_DETAILS))),
           skills: this.api.getUserSkillsById(user.id).pipe(catchError(() => of(JOHN_DOE_SKILLS))),
+          workExperience: this.api
+            .getUserWorkExperienceById(user.id)
+            .pipe(catchError(() => of(JOHN_DOE_WORK_EXPERIENCE))),
         })
       ),
-      tap(({ user, details, skills }) => {
+      tap(({ user, details, skills, workExperience }) => {
         this.user.set(user);
         this.details.set(details);
         this.skills.set(Array.isArray(skills) && skills.length ? skills : JOHN_DOE_SKILLS);
+        this.workExperience.set(
+          Array.isArray(workExperience) && workExperience.length
+            ? workExperience
+            : JOHN_DOE_WORK_EXPERIENCE
+        );
         this.loading.set(false);
       }),
       catchError((err) => {
