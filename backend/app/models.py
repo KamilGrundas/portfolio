@@ -230,3 +230,17 @@ class UserWorkExperience(SQLModel):
     location: str
     highlights: list[ExperienceHighlight] = []
     skills: list[SkillWithCategory] = []
+
+
+class UserEducationBase(SQLModel):
+    school: str | None = Field(default=None, max_length=255)
+    title: str | None = Field(default=None, max_length=100)
+    period: str | None = Field(default=None, max_length=100)
+    location: str | None = Field(default=None, max_length=100)
+    logo_url: str | None = Field(default=None, max_length=255)
+
+
+class UserEducation(UserEducationBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    owner_id: uuid.UUID | None = Field(foreign_key="user.id", default=None, index=True)
+    owner: User | None = Relationship(back_populates="education")
