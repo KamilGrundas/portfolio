@@ -1,36 +1,35 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-
+import { MatIconModule } from '@angular/material/icon';
 
 type EducationData = {
+  title: string;
   school: string;
-  degree: string;
-  field: string;
   period: string;
   location?: string;
+  logo_url?: string;
 };
 
 @Component({
   selector: 'app-education',
-  imports: [],
+  imports: [MatIconModule],
   templateUrl: './education.html',
   styleUrl: './education.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Education {
   education: EducationData[] = [
     {
+      title: 'Bachelor of Science in Computer Science',
       school: 'University of Technology',
-      degree: 'Bachelor of Science',
-      field: 'Computer Science',
       period: '2016 — 2019',
       location: 'Warsaw, PL',
+      logo_url: 'https://w.prz.edu.pl/themes/prz/images/favicon.png?ver=9.73',
     },
     {
+      title: 'Frontend Development Certification',
       school: 'Online Bootcamp',
-      degree: 'Certification',
-      field: 'Frontend Development',
       period: '2020',
+      logo_url: 'https://faq-qa.m.goit.global/pl/img/logo.png',
     },
   ];
 }
-

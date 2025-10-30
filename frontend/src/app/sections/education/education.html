@@ -2,28 +2,31 @@
   <div class="container">
     <h2 class="fw-bold text-center mb-4">Education</h2>
 
-    <div class="row g-4">
-        @for (edu of education; track $index) {
-      <div class="col-12">
-        <div class="card shadow-sm border-0">
-          <div class="card-body">
-            <div class="d-flex flex-column flex-md-row justify-content-between">
+    <div class="position-relative">
+      @for (edu of education; track $index) {
+      <article class="card hover-card shadow-sm border-0 mb-4" tabindex="0">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+            <div class="d-flex align-items-start gap-3">
+              @if (edu.logo_url) {
+              <img class="edu-logo rounded" [src]="edu.logo_url" [alt]="(edu.school || 'School') + ' logo'">
+              }
               <div>
-                <h5 class="card-title mb-1">{{ edu.degree }} in {{ edu.field }}</h5>
-                <p class="mb-0 text-muted">{{ edu.school }}</p>
-                @if (edu.location) {
-                <small class="text-secondary">{{ edu.location }}</small>
-                }
-              </div>
-              <div class="text-md-end mt-2 mt-md-0">
-                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
-                  {{ edu.period }}
-                </span>
+                <h5 class="card-title mb-1">{{ edu.title }}</h5>
+                <div class="text-muted small d-flex flex-wrap gap-3">
+                  <span>{{ edu.school }}</span>
+                  @if (edu.location) { <span>• {{ edu.location }}</span> }
+                </div>
               </div>
             </div>
+
+            <span class="period badge rounded-pill d-inline-flex align-items-center">
+              <mat-icon inline class="me-1">calendar_month</mat-icon>
+              {{ edu.period }}
+            </span>
           </div>
         </div>
-      </div>
+      </article>
       }
     </div>
   </div>
