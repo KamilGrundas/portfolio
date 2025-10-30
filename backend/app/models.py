@@ -100,6 +100,7 @@ class User(UserBase, table=True):
     )
     skills: list["Skill"] = Relationship(back_populates="owner")  # type: ignore
     work_experience: list["WorkExperience"] = Relationship(back_populates="owner")  # type: ignore
+    education: list["Education"] = Relationship(back_populates="owner")  # type: ignore
 
 
 # Properties to return via API, id is always required
@@ -232,7 +233,7 @@ class UserWorkExperience(SQLModel):
     skills: list[SkillWithCategory] = []
 
 
-class UserEducationBase(SQLModel):
+class EducationBase(SQLModel):
     school: str | None = Field(default=None, max_length=255)
     title: str | None = Field(default=None, max_length=100)
     period: str | None = Field(default=None, max_length=100)
@@ -240,7 +241,7 @@ class UserEducationBase(SQLModel):
     logo_url: str | None = Field(default=None, max_length=255)
 
 
-class UserEducation(UserEducationBase, table=True):
+class Education(EducationBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     owner_id: uuid.UUID | None = Field(foreign_key="user.id", default=None, index=True)
     owner: User | None = Relationship(back_populates="education")
