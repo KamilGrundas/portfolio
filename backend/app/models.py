@@ -245,3 +245,12 @@ class Education(EducationBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     owner_id: uuid.UUID | None = Field(foreign_key="user.id", default=None, index=True)
     owner: User | None = Relationship(back_populates="education")
+
+
+class EducationCreate(EducationBase):
+    owner_id: uuid.UUID
+
+
+class EducationPublic(EducationBase):
+    id: uuid.UUID
+    owner_id: uuid.UUID

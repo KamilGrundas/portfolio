@@ -25,6 +25,8 @@ from app.models import (
     ExperienceHighlight,
     UserSkillsByCategory,
     SkillCategory,
+    Education,
+    EducationPublic,
 )
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -277,3 +279,21 @@ def get_user_work_experience(
         )
 
     return result
+
+
+@router.get(
+    "/get-user-education",
+    response_model=list[EducationPublic],
+)
+def get_user_education(
+    session: SessionDep,
+    user_id: uuid.UUID,
+) -> Any:
+    """
+    Get user's education history.
+    """
+    educations = session.exec(
+        select(Education).where(col(Education.owner_id) == user_id)
+    ).all()
+
+    return educations
