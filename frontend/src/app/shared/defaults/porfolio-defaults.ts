@@ -1,4 +1,10 @@
-import { UserPublic, UserDetailsPublic, UserSkillsByCategory, UserWorkExperience } from '../../types';
+import {
+  UserPublic,
+  UserDetailsPublic,
+  UserSkillsByCategory,
+  UserWorkExperience,
+  UserEducation,
+} from '../../types';
 
 export const JOHN_DOE_USER: UserPublic = {
   id: '0',
@@ -94,11 +100,21 @@ export const JOHN_DOE_WORK_EXPERIENCE: UserWorkExperience[] = [
     period: '09/2023 – Present',
     location: 'Warsaw, Poland (Hybrid)',
     highlights: [
-      { text: 'Led migration from Angular 12 to Angular 17 with standalone APIs and Angular Signals, reducing bundle size by 28% and improving LCP by ~350ms.' },
-      { text: 'Introduced a scalable design system (Storybook + Angular CDK) and accessibility checklist, reaching WCAG 2.1 AA on core flows.' },
-      { text: 'Built a high-throughput data grid with virtual scrolling and RxJS backpressure; sustained 60fps rendering for 50k+ rows.' },
-      { text: 'Implemented end-to-end telemetry (Sentry + Web Vitals + custom performance marks) and CI gates in GitHub Actions.' },
-      { text: 'Mentored 4 developers; set up pair-review guidelines and PR templates that cut review time by 35%.' },
+      {
+        text: 'Led migration from Angular 12 to Angular 17 with standalone APIs and Angular Signals, reducing bundle size by 28% and improving LCP by ~350ms.',
+      },
+      {
+        text: 'Introduced a scalable design system (Storybook + Angular CDK) and accessibility checklist, reaching WCAG 2.1 AA on core flows.',
+      },
+      {
+        text: 'Built a high-throughput data grid with virtual scrolling and RxJS backpressure; sustained 60fps rendering for 50k+ rows.',
+      },
+      {
+        text: 'Implemented end-to-end telemetry (Sentry + Web Vitals + custom performance marks) and CI gates in GitHub Actions.',
+      },
+      {
+        text: 'Mentored 4 developers; set up pair-review guidelines and PR templates that cut review time by 35%.',
+      },
     ],
     skills: [
       {
@@ -170,10 +186,18 @@ export const JOHN_DOE_WORK_EXPERIENCE: UserWorkExperience[] = [
     period: '04/2020 – 08/2023',
     location: 'Remote (EU)',
     highlights: [
-      { text: 'Delivered a multi-tenant analytics dashboard with lazy-loaded micro-frontends, cutting first-load JS by 40%.' },
-      { text: 'Created a form engine using Angular Reactive Forms + JSON schema to ship 30+ forms without code changes.' },
-      { text: 'Set up E2E testing pipeline (Cypress + Docker) and visual regression tests (Chromatic) for critical UI.' },
-      { text: 'Collaborated with backend on GraphQL schema; added client-side caching and normalized entities.' },
+      {
+        text: 'Delivered a multi-tenant analytics dashboard with lazy-loaded micro-frontends, cutting first-load JS by 40%.',
+      },
+      {
+        text: 'Created a form engine using Angular Reactive Forms + JSON schema to ship 30+ forms without code changes.',
+      },
+      {
+        text: 'Set up E2E testing pipeline (Cypress + Docker) and visual regression tests (Chromatic) for critical UI.',
+      },
+      {
+        text: 'Collaborated with backend on GraphQL schema; added client-side caching and normalized entities.',
+      },
     ],
     skills: [
       {
@@ -209,9 +233,15 @@ export const JOHN_DOE_WORK_EXPERIENCE: UserWorkExperience[] = [
     period: '07/2018 – 03/2020',
     location: 'Kraków, Poland (On-site)',
     highlights: [
-      { text: 'Implemented pixel-perfect UI components from Figma and improved CLS by 45% using proper image sizing.' },
-      { text: 'Rewrote legacy jQuery widgets into Angular components with OnPush change detection.' },
-      { text: 'Added unit tests with Jest and testing-library; increased coverage from 15% to 70%.' },
+      {
+        text: 'Implemented pixel-perfect UI components from Figma and improved CLS by 45% using proper image sizing.',
+      },
+      {
+        text: 'Rewrote legacy jQuery widgets into Angular components with OnPush change detection.',
+      },
+      {
+        text: 'Added unit tests with Jest and testing-library; increased coverage from 15% to 70%.',
+      },
     ],
     skills: [
       {
@@ -245,5 +275,23 @@ export const JOHN_DOE_WORK_EXPERIENCE: UserWorkExperience[] = [
         category: { name: 'Testing', icon: 'bug_report', color: '#ef4444' },
       },
     ],
+  },
+];
+export const JOGN_DOE_EDUCATION: UserEducation[] = [
+  {
+    id: 'edu-1',
+    school: 'University of Technology',
+    title: 'Bachelor of Science in Computer Science',
+    period: '2016 — 2019',
+    location: 'Warsaw, PL',
+    logo_url: 'https://w.prz.edu.pl/themes/prz/images/favicon.png?ver=9.73',
+  },
+  {
+    id: 'edu-2',
+    school: 'Online Bootcamp',
+    title: 'Frontend Development Certification',
+    period: '2020',
+    location: '',
+    logo_url: 'https://faq-qa.m.goit.global/pl/img/logo.png',
   },
 ];

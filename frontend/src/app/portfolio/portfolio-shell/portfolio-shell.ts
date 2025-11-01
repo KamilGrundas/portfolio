@@ -15,6 +15,7 @@ import {
   UserDetailsPublic,
   UserSkillsByCategory,
   UserWorkExperience,
+  UserEducation,
 } from '../../types';
 import { Overview, OverviewData } from '../../sections/overview/overview';
 import { Navbar, NavbarData } from '../../sections/navbar/navbar';
@@ -31,6 +32,7 @@ import {
   JOHN_DOE_DETAILS,
   JOHN_DOE_SKILLS,
   JOHN_DOE_WORK_EXPERIENCE,
+  JOGN_DOE_EDUCATION,
 } from '../../shared/defaults/porfolio-defaults';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -61,6 +63,7 @@ export class PortfolioShell {
   details = signal<UserDetailsPublic>(JOHN_DOE_DETAILS);
   skills = signal<UserSkillsByCategory[]>(JOHN_DOE_SKILLS);
   workExperience = signal<UserWorkExperience[]>(JOHN_DOE_WORK_EXPERIENCE);
+  education = signal<UserEducation[]>(JOGN_DOE_EDUCATION);
 
   error = signal<string | null>(null);
   loading = signal<boolean>(true);
@@ -93,6 +96,11 @@ export class PortfolioShell {
     return Array.isArray(list) && list.length > 0 ? list : JOHN_DOE_WORK_EXPERIENCE;
   });
 
+  educationData = computed<UserEducation[]>(() => {
+    const list = this.education();
+    return Array.isArray(list) && list.length > 0 ? list : JOGN_DOE_EDUCATION;
+  });
+
   readonly flow$ = this.route.paramMap
     .pipe(
       map((pm) => pm.get('user_url')!),
@@ -113,9 +121,12 @@ export class PortfolioShell {
           workExperience: this.api
             .getUserWorkExperienceById(user.id)
             .pipe(catchError(() => of(JOHN_DOE_WORK_EXPERIENCE))),
+          education: this.api
+            .getUserEducationById(user.id)
+            .pipe(catchError(() => of(JOGN_DOE_EDUCATION))),
         })
       ),
-      tap(({ user, details, skills, workExperience }) => {
+      tap(({ user, details, skills, workExperience, education }) => {
         this.user.set(user);
         this.details.set(details);
         this.skills.set(Array.isArray(skills) && skills.length ? skills : JOHN_DOE_SKILLS);
@@ -123,6 +134,9 @@ export class PortfolioShell {
           Array.isArray(workExperience) && workExperience.length
             ? workExperience
             : JOHN_DOE_WORK_EXPERIENCE
+        );
+        this.education.set(
+          Array.isArray(education) && education.length ? education : JOGN_DOE_EDUCATION
         );
         this.loading.set(false);
       }),

@@ -3,7 +3,7 @@
     <h2 class="fw-bold text-center mb-4">Education</h2>
 
     <div class="position-relative">
-      @for (edu of education; track $index) {
+      @for (edu of education(); track $index) {
       <article class="card hover-card shadow-sm border-0 mb-4" tabindex="0">
         <div class="card-body p-4">
           <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
@@ -15,7 +15,7 @@
                 <h5 class="card-title mb-1">{{ edu.title }}</h5>
                 <div class="text-muted small d-flex flex-wrap gap-3">
                   <span>{{ edu.school }}</span>
-                  @if (edu.location) { <span>• {{ edu.location }}</span> }
+                  @if (edu.location) {<span>•</span><span>{{ edu.location }}</span> }
                 </div>
               </div>
             </div>

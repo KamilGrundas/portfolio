@@ -57,3 +57,12 @@ export interface UserWorkExperience {
   highlights: ExperienceHighlight[];
   skills?: SkillWithCategory[];
 }
+
+export interface UserEducation {
+  id: string;
+  school: string;
+  title: string;
+  period: string;
+  location: string;
+  logo_url: string;
+}
