@@ -101,6 +101,7 @@ class User(UserBase, table=True):
     skills: list["Skill"] = Relationship(back_populates="owner")  # type: ignore
     work_experience: list["WorkExperience"] = Relationship(back_populates="owner")  # type: ignore
     education: list["Education"] = Relationship(back_populates="owner")  # type: ignore
+    certificates: list["Certificate"] = Relationship(back_populates="owner")  # type: ignore
 
 
 # Properties to return via API, id is always required
@@ -252,5 +253,28 @@ class EducationCreate(EducationBase):
 
 
 class EducationPublic(EducationBase):
+    id: uuid.UUID
+    owner_id: uuid.UUID
+
+
+class CertificateBase(SQLModel):
+    name: str = Field(default=None, max_length=255)
+    issuer: str | None = Field(default=None, max_length=255)
+    issue_date: str | None = Field(default=None, max_length=100)
+    credential_id: str | None = Field(default=None, max_length=100)
+    credential_url: str | None = Field(default=None, max_length=255)
+
+
+class Certificate(CertificateBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    owner_id: uuid.UUID | None = Field(foreign_key="user.id", default=None, index=True)
+    owner: User | None = Relationship(back_populates="certificates")
+
+
+class CertificateCreate(CertificateBase):
+    owner_id: uuid.UUID
+
+
+class CertificatePublic(CertificateBase):
     id: uuid.UUID
     owner_id: uuid.UUID
