@@ -27,6 +27,8 @@ from app.models import (
     SkillCategory,
     Education,
     EducationPublic,
+    Certificate,
+    CertificatePublic,
 )
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -297,3 +299,21 @@ def get_user_education(
     ).all()
 
     return educations
+
+
+@router.get(
+    "/get-user-certificates",
+    response_model=list[CertificatePublic],
+)
+def get_user_certificates(
+    session: SessionDep,
+    user_id: uuid.UUID,
+) -> Any:
+    """
+    Get user's certificates.
+    """
+    certificates = session.exec(
+        select(Certificate).where(col(Certificate.owner_id) == user_id)
+    ).all()
+
+    return certificates

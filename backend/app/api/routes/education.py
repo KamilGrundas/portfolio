@@ -15,12 +15,12 @@ router = APIRouter(prefix="/education", tags=["education"])
 
 
 @router.post("/", response_model=Education)
-def create_education(*, session: SessionDep, skill_category_in: EducationCreate) -> Any:
+def create_education(*, session: SessionDep, education_in: EducationCreate) -> Any:
     """
     Create new education item.
     """
-    skill_category = Education.model_validate(skill_category_in)
-    session.add(skill_category)
+    education = Education.model_validate(education_in)
+    session.add(education)
     session.commit()
-    session.refresh(skill_category)
-    return skill_category
+    session.refresh(education)
+    return education
