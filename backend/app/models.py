@@ -260,6 +260,7 @@ class EducationPublic(EducationBase):
 class CertificateBase(SQLModel):
     name: str = Field(default=None, max_length=255)
     issuer: str | None = Field(default=None, max_length=255)
+    issuer_logo_url: str | None = Field(default=None, max_length=255)
     issue_date: str | None = Field(default=None, max_length=100)
     credential_id: str | None = Field(default=None, max_length=100)
     credential_url: str | None = Field(default=None, max_length=255)
