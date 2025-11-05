@@ -7,6 +7,7 @@ import {
   UserSkillsByCategory,
   UserWorkExperience,
   UserEducation,
+  UserCertificate,
 } from '../../types';
 import { environment } from '../../../environments/environment.development';
 
@@ -49,5 +50,12 @@ export class Master {
   // GET /users/{uuid}/education
   getUserEducationById(userId: string): Observable<UserEducation[]> {
     return this.http.get<UserEducation[]>(`${this.users}/get-user-education?user_id=${userId}`);
+  }
+
+  // GET /users/{uuid}/certificates
+  getUserCertificatesById(userId: string): Observable<UserCertificate[]> {
+    return this.http.get<UserCertificate[]>(
+      `${this.users}/get-user-certificates?user_id=${userId}`
+    );
   }
 }

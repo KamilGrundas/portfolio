@@ -4,6 +4,7 @@ import {
   UserSkillsByCategory,
   UserWorkExperience,
   UserEducation,
+  UserCertificate,
 } from '../../types';
 
 export const JOHN_DOE_USER: UserPublic = {
@@ -277,7 +278,7 @@ export const JOHN_DOE_WORK_EXPERIENCE: UserWorkExperience[] = [
     ],
   },
 ];
-export const JOGN_DOE_EDUCATION: UserEducation[] = [
+export const JOHN_DOE_EDUCATION: UserEducation[] = [
   {
     id: 'edu-1',
     school: 'University of Technology',
@@ -293,5 +294,36 @@ export const JOGN_DOE_EDUCATION: UserEducation[] = [
     period: '2020',
     location: '',
     logo_url: 'https://faq-qa.m.goit.global/pl/img/logo.png',
+  },
+];
+
+export const JOHN_DOE_CERTIFICATES: UserCertificate[] = [
+  {
+    id: 'cert-1',
+    name: 'AWS Certified Cloud Practitioner',
+    issuer: 'Amazon Web Services (AWS)',
+    issuer_logo_url: 'https://a0.awsstatic.com/libra-css/images/site/touch-icon-ipad-144-smile.png',
+    issue_date: 'May 2023',
+    credential_id: 'ABCDEF-123456',
+    credential_url: 'https://www.credly.com/badges/abcdef123456',
+  },
+  {
+    id: 'cert-2',
+    name: 'Google Data Analytics Professional Certificate',
+    issuer: 'Google / Coursera',
+    issuer_logo_url:
+      'https://d3njjcbhbojbot.cloudfront.net/web/images/favicons/favicon-v2-96x96.png',
+    issue_date: 'Nov 2022',
+    credential_id: '',
+    credential_url: 'https://coursera.org/verify/ABCDEFG12345',
+  },
+  {
+    id: 'cert-3',
+    name: 'Responsive Web Design',
+    issuer: 'freeCodeCamp',
+    issuer_logo_url: 'https://www.freecodecamp.org/icons/icon-96x96.png',
+    issue_date: '2021',
+    credential_id: '',
+    credential_url: 'https://www.freecodecamp.org/certification/johndoe/responsive-web-design',
   },
 ];

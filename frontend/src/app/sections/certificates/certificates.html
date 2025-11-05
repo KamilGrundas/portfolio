@@ -1,36 +1,42 @@
 <section id="certificates" class="py-5">
-    <div class="container">
-        <h2 class="fw-bold text-center mb-4">Certificates</h2>
+  <div class="container">
+    <h2 class="fw-bold text-center mb-4">Certificates</h2>
 
-        <div class="row g-4">
-            @for (cert of certificates; track $index) {
-            <div class="col-12">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body d-flex flex-column flex-md-row justify-content-between">
-                        <div class="me-md-3">
-                            <h5 class="card-title mb-1">{{ cert.name }}</h5>
-                            <p class="mb-1 text-muted">{{ cert.issuer }}</p>
-                            @if (cert.credentialId) {
-                            <small class="text-secondary">
-                                Credential ID: {{ cert.credentialId }}
-                            </small>
-                            }
-                        </div>
-                        <div class="text-md-end mt-3 mt-md-0">
-                            <span class="badge bg-success-subtle text-success border border-success-subtle me-2">
-                                {{ cert.issued }}
-                            </span>
-                            @if (cert.verifyUrl) {
-                            <a class="btn btn-outline-primary btn-sm" [href]="cert.verifyUrl" target="_blank"
-                                rel="noopener">
-                                Verify
-                            </a>
-                            }
-                        </div>
-                    </div>
+    <div class="position-relative">
+      @for (c of certificates(); track $index) {
+      <article class="card hover-card shadow-sm border-0 mb-4" tabindex="0">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+            <div class="d-flex align-items-start gap-3">
+              @if (c.issuer_logo_url) {
+              <img class="cert-logo rounded" [src]="c.issuer_logo_url" [alt]="(c.issuer || 'Issuer') + ' logo'">
+              }
+              <div>
+                <h5 class="card-title mb-1">
+                  @if (c.credential_url) {
+                    <a [href]="c.credential_url" target="_blank" rel="noopener" class="text-decoration-none">
+                      {{ c.name }}
+                    </a>
+                  } @else {
+                    {{ c.name }}
+                  }
+                </h5>
+
+                <div class="text-muted small d-flex flex-wrap gap-3 align-items-center">
+                  @if (c.issuer) { <span>{{ c.issuer }}</span> }
+                  @if (c.credential_id) { <span>•</span><span>Credential ID: {{ c.credential_id }}</span> }
                 </div>
+              </div>
             </div>
-            }
+
+            <span class="period badge rounded-pill d-inline-flex align-items-center">
+              <mat-icon inline class="me-1">calendar_month</mat-icon>
+              {{ c.issue_date || '—' }}
+            </span>
+          </div>
         </div>
+      </article>
+      }
     </div>
+  </div>
 </section>

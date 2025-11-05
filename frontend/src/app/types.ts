@@ -66,3 +66,13 @@ export interface UserEducation {
   location: string;
   logo_url: string;
 }
+
+export interface UserCertificate {
+  id: string;
+  name: string;
+  issuer: string;
+  issuer_logo_url?: string;
+  issue_date: string;
+  credential_id?: string;
+  credential_url?: string;
+}

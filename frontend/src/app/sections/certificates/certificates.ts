@@ -1,34 +1,14 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-type Certificate = {
-  name: string;
-  issuer: string;
-  issued: string;          // e.g., "Sep 2024"
-  credentialId?: string;   // optional credential ID
-  verifyUrl?: string;      // optional verification link
-};
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { UserCertificate } from '../../types';
 
 @Component({
   selector: 'app-certificates',
-  imports: [],
+  imports: [MatIconModule],
   templateUrl: './certificates.html',
   styleUrl: './certificates.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Certificates {
-certificates: Certificate[] = [
-    {
-      name: 'Angular Developer Certificate',
-      issuer: 'Acme Institute',
-      issued: 'Sep 2024',
-      credentialId: 'ANG-1234-5678',
-      verifyUrl: 'https://verify.example.com/ANG-1234-5678',
-    },
-    {
-      name: 'TypeScript Advanced',
-      issuer: 'Tech Academy',
-      issued: 'May 2023',
-      // no verifyUrl provided
-    },
-  ];
+  certificates = input.required<UserCertificate[]>();
 }

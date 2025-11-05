@@ -16,6 +16,7 @@ import {
   UserSkillsByCategory,
   UserWorkExperience,
   UserEducation,
+  UserCertificate,
 } from '../../types';
 import { Overview, OverviewData } from '../../sections/overview/overview';
 import { Navbar, NavbarData } from '../../sections/navbar/navbar';
@@ -32,7 +33,8 @@ import {
   JOHN_DOE_DETAILS,
   JOHN_DOE_SKILLS,
   JOHN_DOE_WORK_EXPERIENCE,
-  JOGN_DOE_EDUCATION,
+  JOHN_DOE_EDUCATION,
+  JOHN_DOE_CERTIFICATES,
 } from '../../shared/defaults/porfolio-defaults';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -63,7 +65,8 @@ export class PortfolioShell {
   details = signal<UserDetailsPublic>(JOHN_DOE_DETAILS);
   skills = signal<UserSkillsByCategory[]>(JOHN_DOE_SKILLS);
   workExperience = signal<UserWorkExperience[]>(JOHN_DOE_WORK_EXPERIENCE);
-  education = signal<UserEducation[]>(JOGN_DOE_EDUCATION);
+  education = signal<UserEducation[]>(JOHN_DOE_EDUCATION);
+  certificates = signal<UserCertificate[]>(JOHN_DOE_CERTIFICATES);
 
   error = signal<string | null>(null);
   loading = signal<boolean>(true);
@@ -98,7 +101,12 @@ export class PortfolioShell {
 
   educationData = computed<UserEducation[]>(() => {
     const list = this.education();
-    return Array.isArray(list) && list.length > 0 ? list : JOGN_DOE_EDUCATION;
+    return Array.isArray(list) && list.length > 0 ? list : JOHN_DOE_EDUCATION;
+  });
+
+  certificatesData = computed<UserCertificate[]>(() => {
+    const list = this.certificates();
+    return Array.isArray(list) && list.length > 0 ? list : JOHN_DOE_CERTIFICATES;
   });
 
   readonly flow$ = this.route.paramMap
@@ -123,10 +131,13 @@ export class PortfolioShell {
             .pipe(catchError(() => of(JOHN_DOE_WORK_EXPERIENCE))),
           education: this.api
             .getUserEducationById(user.id)
-            .pipe(catchError(() => of(JOGN_DOE_EDUCATION))),
+            .pipe(catchError(() => of(JOHN_DOE_EDUCATION))),
+          certificates: this.api
+            .getUserCertificatesById(user.id)
+            .pipe(catchError(() => of(JOHN_DOE_CERTIFICATES))),
         })
       ),
-      tap(({ user, details, skills, workExperience, education }) => {
+      tap(({ user, details, skills, workExperience, education, certificates }) => {
         this.user.set(user);
         this.details.set(details);
         this.skills.set(Array.isArray(skills) && skills.length ? skills : JOHN_DOE_SKILLS);
@@ -136,7 +147,10 @@ export class PortfolioShell {
             : JOHN_DOE_WORK_EXPERIENCE
         );
         this.education.set(
-          Array.isArray(education) && education.length ? education : JOGN_DOE_EDUCATION
+          Array.isArray(education) && education.length ? education : JOHN_DOE_EDUCATION
+        );
+        this.certificates.set(
+          Array.isArray(certificates) && certificates.length ? certificates : JOHN_DOE_CERTIFICATES
         );
         this.loading.set(false);
       }),
