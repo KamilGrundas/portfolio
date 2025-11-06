@@ -14,6 +14,15 @@ class WorkExperienceSkillLink(SQLModel, table=True):
     )
 
 
+class ProjectSkillLink(SQLModel, table=True):
+    project_id: uuid.UUID | None = Field(
+        default_factory=uuid.uuid4, foreign_key="project.id", primary_key=True
+    )
+    skill_id: uuid.UUID | None = Field(
+        default_factory=uuid.uuid4, foreign_key="skill.id", primary_key=True
+    )
+
+
 # Shared properties
 class UserBase(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
@@ -154,6 +163,10 @@ class Skill(SkillBase, table=True):
         back_populates="skills",
         link_model=WorkExperienceSkillLink,
     )
+    projects: list["Project"] = Relationship(
+        back_populates="skills",
+        link_model=ProjectSkillLink,
+    )
 
 
 class SkillCreate(SkillBase):
@@ -279,3 +292,37 @@ class CertificateCreate(CertificateBase):
 class CertificatePublic(CertificateBase):
     id: uuid.UUID
     owner_id: uuid.UUID
+
+
+class ProjectBase(SQLModel):
+    name: str = Field(default=None, max_length=255)
+    source_code: str = Field(default=None, max_length=255)
+    deployment_url: str = Field(default=None, max_length=255)
+    description: str | None = Field(default=None, sa_column=Column(Text))
+    skills: list["Skill"] = Relationship(
+        back_populates="projects",
+        link_model=ProjectSkillLink,
+    )
+
+
+class Project(ProjectBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    owner_id: uuid.UUID | None = Field(foreign_key="user.id", default=None, index=True)
+    owner: User | None = Relationship(back_populates="projects")
+
+
+class ProjectCreate(ProjectBase):
+    owner_id: uuid.UUID
+
+
+class ProjectPublic(ProjectBase):
+    id: uuid.UUID
+    owner_id: uuid.UUID
+
+
+class UserProjects(SQLModel):
+    name: str
+    source_code: str
+    deployment_url: str | None
+    description: str | None
+    skills: list[SkillWithCategory] = []
