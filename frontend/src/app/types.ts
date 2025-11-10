@@ -76,3 +76,13 @@ export interface UserCertificate {
   credential_id?: string;
   credential_url?: string;
 }
+
+export interface UserProject {
+  id: string;
+  name: string;
+  source_code?: string;
+  deployment_url?: string;
+  description?: string | null;
+  skills?: SkillWithCategory[];
+  imageUrl?: string | null;
+}

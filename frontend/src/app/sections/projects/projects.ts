@@ -1,57 +1,55 @@
 import { Component } from '@angular/core';
-
-type Project = {
-  title: string;
-  description: string;
-  tech: string[];
-  githubUrl?: string;
-  liveUrl?: string;
-  imageUrl?: string;
-};
+import { UserProject } from '../../types';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-projects',
-  imports: [],
+  imports: [MatIconModule],
   templateUrl: './projects.html',
-  styleUrl: './projects.css'
+  styleUrl: './projects.css',
 })
 export class Projects {
-  projects: Project[] = [
+  projects: UserProject[] = [
     {
-      title: 'Portfolio Website',
-      description: 'Personal portfolio built with Angular, TypeScript and Bootstrap. Features dark/light mode toggle and responsive design.',
-      tech: ['Angular', 'TypeScript', 'Bootstrap'],
-      githubUrl: 'https://github.com/johndoe/portfolio',
-      liveUrl: 'https://johndoe.dev',
+      id: 'proj-1',
+      name: 'Portfolio Website',
+      description:
+        'Personal portfolio built with Angular, TypeScript and Bootstrap. Features dark/light mode toggle and responsive design.',
+      skills: [
+        {
+          id: 'html',
+          name: 'HTML5',
+          order: 1,
+          category: { name: 'Languages', icon: 'html', color: '#e34f26' },
+        },
+        {
+          id: 'css',
+          name: 'CSS3',
+          order: 2,
+          category: { name: 'Styling', icon: 'style', color: '#2563eb' },
+        },
+        {
+          id: 'js',
+          name: 'JavaScript (ES6+)',
+          order: 3,
+          category: { name: 'Languages', icon: 'javascript', color: '#f59e0b' },
+        },
+        {
+          id: 'figma',
+          name: 'Figma',
+          order: 4,
+          category: { name: 'UX & Design', icon: 'design_services', color: '#a78bfa' },
+        },
+        {
+          id: 'testing-library',
+          name: 'Testing Library',
+          order: 5,
+          category: { name: 'Testing', icon: 'bug_report', color: '#ef4444' },
+        },
+      ],
+      source_code: 'https://github.com/johndoe/portfolio',
+      deployment_url: 'https://johndoe.dev',
       imageUrl: 'https://i.postimg.cc/XYJ3n7y2/Screenshot-2025-09-12-at-14-19-13.png',
-    },
-    {
-      title: 'Task Manager',
-      description: 'A Kanban-style task manager with drag-and-drop functionality and persistent storage.',
-      tech: ['Angular', 'RxJS', 'LocalStorage'],
-      githubUrl: 'https://github.com/johndoe/task-manager',
-      // brak imageUrl → karta będzie bez obrazka
-    },
-    {
-      title: 'Weather App',
-      description: 'Weather forecast app using OpenWeather API with geolocation and city search.',
-      tech: ['Angular', 'TypeScript', 'REST API'],
-      liveUrl: 'https://weather.johndoe.dev',
-      imageUrl: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/spanish-weather_ver_3.jpg',
-    },
-    {
-      title: 'Task Manager',
-      description: 'A Kanban-style task manager with drag-and-drop functionality and persistent storage.',
-      tech: ['Angular', 'RxJS', 'LocalStorage'],
-      githubUrl: 'https://github.com/johndoe/task-manager',
-      // brak imageUrl → karta będzie bez obrazka
-    },
-    {
-      title: 'Weather App',
-      description: 'Weather forecast app using OpenWeather API with geolocation and city search.',
-      tech: ['Angular', 'TypeScript', 'REST API'],
-      liveUrl: 'https://weather.johndoe.dev',
-      imageUrl: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/spanish-weather_ver_3.jpg',
     },
   ];
 }
