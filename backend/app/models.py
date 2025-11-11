@@ -111,6 +111,7 @@ class User(UserBase, table=True):
     work_experience: list["WorkExperience"] = Relationship(back_populates="owner")  # type: ignore
     education: list["Education"] = Relationship(back_populates="owner")  # type: ignore
     certificates: list["Certificate"] = Relationship(back_populates="owner")  # type: ignore
+    projects: list["Project"] = Relationship(back_populates="owner")  # type: ignore
 
 
 # Properties to return via API, id is always required
@@ -297,18 +298,18 @@ class CertificatePublic(CertificateBase):
 class ProjectBase(SQLModel):
     name: str = Field(default=None, max_length=255)
     source_code: str = Field(default=None, max_length=255)
-    deployment_url: str = Field(default=None, max_length=255)
+    deployment_url: str | None = Field(default=None, max_length=255)
     description: str | None = Field(default=None, sa_column=Column(Text))
-    skills: list["Skill"] = Relationship(
-        back_populates="projects",
-        link_model=ProjectSkillLink,
-    )
 
 
 class Project(ProjectBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     owner_id: uuid.UUID | None = Field(foreign_key="user.id", default=None, index=True)
     owner: User | None = Relationship(back_populates="projects")
+    skills: list["Skill"] = Relationship(
+        back_populates="projects",
+        link_model=ProjectSkillLink,
+    )
 
 
 class ProjectCreate(ProjectBase):

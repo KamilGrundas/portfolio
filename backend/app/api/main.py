@@ -9,6 +9,7 @@ from app.api.routes import (
     work_experiences,
     education,
     certificates,
+    projects,
 )
 
 api_router = APIRouter()
@@ -20,3 +21,4 @@ api_router.include_router(experience_highlights.router)
 api_router.include_router(work_experiences.router)
 api_router.include_router(education.router)
 api_router.include_router(certificates.router)
+api_router.include_router(projects.router)

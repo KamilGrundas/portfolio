@@ -29,6 +29,8 @@ from app.models import (
     EducationPublic,
     Certificate,
     CertificatePublic,
+    UserProjects,
+    Project,
 )
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -317,3 +319,60 @@ def get_user_certificates(
     ).all()
 
     return certificates
+
+
+@router.get(
+    "/get-user-project",
+    response_model=list[UserProjects],
+)
+def get_user_project(
+    session: SessionDep,
+    user_id: uuid.UUID,
+) -> Any:
+    """
+    Get user's projects.
+    """
+    projects = session.exec(
+        select(Project)
+        .where(col(Project.owner_id) == user_id)
+        .options(
+            selectinload(Project.skills).selectinload(Skill.category)  # type: ignore
+        )
+    ).all()
+
+    result: list[UserProjects] = []
+
+    for proj in projects:
+        skills_with_cat: list[SkillWithCategory] = []
+        for s in proj.skills:
+            cat_public = (
+                SkillCategoryPublic(
+                    id=s.category.id,
+                    name=s.category.name,
+                    icon=s.category.icon,
+                    color=s.category.color,
+                    order=s.category.order or 0,
+                )
+                if s.category
+                else None
+            )
+            skills_with_cat.append(
+                SkillWithCategory(
+                    id=s.id,
+                    name=s.name,
+                    order=s.order or 0,
+                    category=cat_public,
+                )
+            )
+
+        result.append(
+            UserProjects(
+                name=proj.name or "",
+                source_code=proj.source_code or "",
+                deployment_url=proj.deployment_url,
+                description=proj.description,
+                skills=skills_with_cat,
+            )
+        )
+
+    return result
