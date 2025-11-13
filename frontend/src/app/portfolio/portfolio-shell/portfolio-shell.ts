@@ -17,6 +17,7 @@ import {
   UserWorkExperience,
   UserEducation,
   UserCertificate,
+  UserProject,
 } from '../../types';
 import { Overview, OverviewData } from '../../sections/overview/overview';
 import { Navbar, NavbarData } from '../../sections/navbar/navbar';
@@ -35,6 +36,7 @@ import {
   JOHN_DOE_WORK_EXPERIENCE,
   JOHN_DOE_EDUCATION,
   JOHN_DOE_CERTIFICATES,
+  JOHN_DOE_PROJECTS,
 } from '../../shared/defaults/porfolio-defaults';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -67,6 +69,7 @@ export class PortfolioShell {
   workExperience = signal<UserWorkExperience[]>(JOHN_DOE_WORK_EXPERIENCE);
   education = signal<UserEducation[]>(JOHN_DOE_EDUCATION);
   certificates = signal<UserCertificate[]>(JOHN_DOE_CERTIFICATES);
+  projects = signal<UserProject[]>(JOHN_DOE_PROJECTS);
 
   error = signal<string | null>(null);
   loading = signal<boolean>(true);
@@ -109,6 +112,11 @@ export class PortfolioShell {
     return Array.isArray(list) && list.length > 0 ? list : JOHN_DOE_CERTIFICATES;
   });
 
+  projectsData = computed<UserProject[]>(() => {
+    const list = this.projects();
+    return Array.isArray(list) && list.length > 0 ? list : JOHN_DOE_PROJECTS;
+  });
+
   readonly flow$ = this.route.paramMap
     .pipe(
       map((pm) => pm.get('user_url')!),
@@ -127,7 +135,7 @@ export class PortfolioShell {
             .pipe(catchError(() => of(JOHN_DOE_DETAILS))),
           skills: this.api.getUserSkillsById(user.id).pipe(catchError(() => of(JOHN_DOE_SKILLS))),
           workExperience: this.api
-            .getUserWorkExperienceById(user.id)
+            .getUserWorkExperiencesById(user.id)
             .pipe(catchError(() => of(JOHN_DOE_WORK_EXPERIENCE))),
           education: this.api
             .getUserEducationById(user.id)
@@ -135,9 +143,12 @@ export class PortfolioShell {
           certificates: this.api
             .getUserCertificatesById(user.id)
             .pipe(catchError(() => of(JOHN_DOE_CERTIFICATES))),
+          projects: this.api
+            .getUserProjectsById(user.id)
+            .pipe(catchError(() => of(JOHN_DOE_PROJECTS))),
         })
       ),
-      tap(({ user, details, skills, workExperience, education, certificates }) => {
+      tap(({ user, details, skills, workExperience, education, certificates, projects }) => {
         this.user.set(user);
         this.details.set(details);
         this.skills.set(Array.isArray(skills) && skills.length ? skills : JOHN_DOE_SKILLS);
@@ -151,6 +162,9 @@ export class PortfolioShell {
         );
         this.certificates.set(
           Array.isArray(certificates) && certificates.length ? certificates : JOHN_DOE_CERTIFICATES
+        );
+        this.projects.set(
+          Array.isArray(projects) && projects.length ? projects : JOHN_DOE_PROJECTS
         );
         this.loading.set(false);
       }),
