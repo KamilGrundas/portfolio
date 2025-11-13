@@ -222,10 +222,10 @@ def get_user_skills(
 
 
 @router.get(
-    "/get-user-work-experience",
+    "/get-user-work-experiences",
     response_model=list[UserWorkExperience],
 )
-def get_user_work_experience(
+def get_user_work_experiences(
     session: SessionDep,
     user_id: uuid.UUID,
 ) -> Any:
@@ -322,10 +322,10 @@ def get_user_certificates(
 
 
 @router.get(
-    "/get-user-project",
+    "/get-user-projects",
     response_model=list[UserProjects],
 )
-def get_user_project(
+def get_user_projects(
     session: SessionDep,
     user_id: uuid.UUID,
 ) -> Any:
