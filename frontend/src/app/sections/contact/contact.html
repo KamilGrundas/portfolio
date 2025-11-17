@@ -1,95 +1,97 @@
 <section id="contact" class="py-5">
     <div class="container">
         <h2 class="fw-bold text-center mb-4">Contact</h2>
+        <div class="row g-4 align-items-stretch">
+            <div class="col-lg-6 d-flex">
+                <article class="card hover-card shadow-sm border-0 w-100 h-100">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h4 class="fw-bold mb-3">Contact Information</h4>
+                        <ul class="list-unstyled contact-list mb-0 mt-3">
+                            @if (user_contacts.email) {
+                            <li class="d-flex align-items-start gap-3 contact-item">
+                                <span class="icon-box d-inline-flex align-items-center justify-content-center rounded">
+                                    <mat-icon class="icon">mail</mat-icon>
+                                </span>
+                                <div>
+                                    <div class="text-muted small">Email</div>
+                                    <div>{{ user_contacts.email }}</div>
+                                </div>
+                            </li>
+                            }
+                            @if (user_contacts.phone) {
+                            <li class="d-flex align-items-start gap-3 contact-item">
+                                <span class="icon-box d-inline-flex align-items-center justify-content-center rounded">
+                                    <mat-icon class="icon">phone</mat-icon>
+                                </span>
+                                <div>
+                                    <div class="text-muted small">Phone</div>
+                                    <div>{{ user_contacts.phone }}</div>
+                                </div>
+                            </li>
+                            }
+                            @if (user_contacts.linkedin) {
+                            <li class="d-flex align-items-start gap-3 contact-item">
+                                <span class="icon-box d-inline-flex align-items-center justify-content-center rounded">
+                                    <mat-icon class="icon">linkedin</mat-icon>
+                                </span>
+                                <div>
+                                    <div class="text-muted small">LinkedIn</div>
+                                    <div>
+                                        <a class="link-plain" href="{{ user_contacts.linkedin }}" target="_blank"
+                                            rel="noopener noreferrer">
+                                            {{ user_contacts.linkedin }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            }
+                            @if (user_contacts.location) {
+                            <li class="d-flex align-items-start gap-3 contact-item">
+                                <span class="icon-box d-inline-flex align-items-center justify-content-center rounded">
+                                    <mat-icon class="icon">place</mat-icon>
+                                </span>
+                                <div>
+                                    <div class="text-muted small">Location</div>
+                                    <div>{{ user_contacts.location }}</div>
+                                </div>
+                            </li>
+                            }
+                        </ul>
+                        <div class="mt-auto" aria-hidden="true"></div>
+                    </div>
+                </article>
+            </div>
 
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-8">
-                <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-                    <!-- Name -->
-                    <div class="mb-3">
-                        <label for="name" class="form-label fw-semibold">Name</label>
-                        <input
-                            id="name"
-                            type="text"
-                            class="form-control"
-                            formControlName="name"
-                            [class.is-invalid]="form.controls.name.touched && form.controls.name.invalid"
-                            autocomplete="name"
-                            required
-                            minlength="2"
-                            aria-describedby="nameHelp nameError"
-                        />
-                        <div id="nameHelp" class="form-text">Enter at least 2 characters.</div>
-                        @if (form.controls.name.touched && form.controls.name.invalid) {
-                            <div id="nameError" class="invalid-feedback">
-                                Please provide your name.
+            <div class="col-lg-6 d-flex">
+                <article class="card hover-card shadow-sm border-0 w-100 h-100">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h4 class="fw-bold mb-3">Send a Message</h4>
+                        <form id="contactForm" class="d-flex flex-column gap-3 mt-2" novalidate>
+                            <div>
+                                <label class="form-label small text-muted">Full Name</label>
+                                <input type="text" class="form-control rounded-pill form-control-lg"
+                                    placeholder="Your Name" required>
                             </div>
-                        }
-                    </div>
-
-                    <!-- Email -->
-                    <div class="mb-3">
-                        <label for="email" class="form-label fw-semibold">Email</label>
-                        <input
-                            id="email"
-                            type="email"
-                            class="form-control"
-                            formControlName="email"
-                            [class.is-invalid]="form.controls.email.touched && form.controls.email.invalid"
-                            autocomplete="email"
-                            required
-                            aria-describedby="emailError"
-                        />
-                        @if (form.controls.email.touched && form.controls.email.invalid) {
-                            <div id="emailError" class="invalid-feedback">
-                                Please enter a valid email address.
+                            <div>
+                                <label class="form-label small text-muted">Email Address</label>
+                                <input type="email" class="form-control rounded-pill form-control-lg"
+                                    placeholder="your.email@example.com" required>
                             </div>
-                        }
-                    </div>
-
-                    <!-- Message -->
-                    <div class="mb-3">
-                        <label for="message" class="form-label fw-semibold">Message</label>
-                        <textarea
-                            id="message"
-                            rows="6"
-                            class="form-control"
-                            formControlName="message"
-                            [class.is-invalid]="form.controls.message.touched && form.controls.message.invalid"
-                            required
-                            minlength="10"
-                            aria-describedby="messageError"
-                        ></textarea>
-                        @if (form.controls.message.touched && form.controls.message.invalid) {
-                            <div id="messageError" class="invalid-feedback">
-                                Please enter a message (min. 10 characters).
+                            <div>
+                                <label class="form-label small text-muted">Message</label>
+                                <textarea rows="5" class="form-control rounded" placeholder="Your message..."
+                                    required></textarea>
                             </div>
-                        }
+                            <div class="d-grid mt-2">
+                                <button type="submit"
+                                    class="btn send-btn btn-lg rounded-pill d-flex align-items-center justify-content-center gap-2">
+                                    <mat-icon class="icon">send</mat-icon>
+                                    <span>Send Message</span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
-
-                    <div class="d-flex gap-2 align-items-center">
-                        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || submitting()">
-                            {{ submitting() ? 'Sending…' : 'Send Message' }}
-                        </button>
-
-                        <a class="btn btn-outline-secondary" href="mailto:john.doe@example.com">
-                            Email Me Directly
-                        </a>
-                    </div>
-
-                    @if (sent()) {
-                        <div class="alert alert-success mt-3" role="status">
-                            Thanks! Your message has been sent.
-                        </div>
-                    }
-                </form>
-
-                <!-- Optional: social links -->
-                <div class="d-flex gap-3 mt-4">
-                    <a class="link-secondary" href="https://github.com/johndoe" target="_blank" rel="noopener">GitHub</a>
-                    <a class="link-secondary" href="https://www.linkedin.com/in/johndoe" target="_blank" rel="noopener">LinkedIn</a>
-                    <a class="link-secondary" href="https://twitter.com/johndoe" target="_blank" rel="noopener">Twitter/X</a>
-                </div>
+                </article>
             </div>
         </div>
     </div>
