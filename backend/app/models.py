@@ -112,6 +112,7 @@ class User(UserBase, table=True):
     education: list["Education"] = Relationship(back_populates="owner")  # type: ignore
     certificates: list["Certificate"] = Relationship(back_populates="owner")  # type: ignore
     projects: list["Project"] = Relationship(back_populates="owner")  # type: ignore
+    contact: "Contact" | None = Relationship(back_populates="user")  # type: ignore
 
 
 # Properties to return via API, id is always required
@@ -327,3 +328,37 @@ class UserProjects(SQLModel):
     deployment_url: str | None
     description: str | None
     skills: list[SkillWithCategory] = []
+
+
+class ContactBase(SQLModel):
+    contact_email: EmailStr = Field(max_length=255)
+    phone_number: str | None = Field(default=None, max_length=20)
+    linked_in_url: str | None = Field(default=None, max_length=255)
+    github_url: str | None = Field(default=None, max_length=255)
+    location: str | None = Field(default=None, max_length=255)
+
+
+class Contact(ContactBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    user_id: uuid.UUID = Field(
+        foreign_key="user.id", unique=True, index=True, nullable=False
+    )
+
+    user: "User" = Relationship(back_populates="contact")
+
+
+class ContactCreate(ContactBase):
+    user_id: uuid.UUID
+
+
+class ContactPublic(ContactBase):
+    id: uuid.UUID
+    user_id: uuid.UUID
+
+
+class UserContact(SQLModel):
+    contact_email: EmailStr
+    phone_number: str | None
+    linked_in_url: str | None
+    github_url: str | None
+    location: str | None
