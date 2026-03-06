@@ -112,7 +112,7 @@ class User(UserBase, table=True):
     education: list["Education"] = Relationship(back_populates="owner")  # type: ignore
     certificates: list["Certificate"] = Relationship(back_populates="owner")  # type: ignore
     projects: list["Project"] = Relationship(back_populates="owner")  # type: ignore
-    contact: "Contact" | None = Relationship(back_populates="user")  # type: ignore
+    contact: "Contact" = Relationship(back_populates="user")  # type: ignore
 
 
 # Properties to return via API, id is always required

@@ -62,6 +62,21 @@ def read_user_me(current_user: CurrentUser) -> Any:
     return current_user
 
 
+@router.get("/me/details", response_model=UserDetailsPublic)
+def read_my_details(session: SessionDep, current_user: CurrentUser) -> Any:
+    """
+    Get current user's details.
+    """
+    db_user = session.get(User, current_user.id)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if not db_user.details:
+        raise HTTPException(status_code=404, detail="User details not found")
+
+    return db_user.details
+
+
 @router.get("/by-id/{user_id}", response_model=UserPublic)
 def read_user_by_id(user_id: uuid.UUID, session: SessionDep) -> Any:
     """
@@ -92,21 +107,6 @@ def read_user_details_by_id(user_id: uuid.UUID, session: SessionDep) -> Any:
     Get user's details by id.
     """
     db_user = session.get(User, user_id)
-    if not db_user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    if not db_user.details:
-        raise HTTPException(status_code=404, detail="User details not found")
-
-    return db_user.details
-
-
-@router.get("/me/details", response_model=UserDetailsPublic)
-def read_my_details(session: SessionDep, current_user: CurrentUser) -> Any:
-    """
-    Get current user's details.
-    """
-    db_user = session.get(User, current_user.id)
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
 
