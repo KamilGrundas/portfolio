@@ -9,17 +9,35 @@
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" routerLink="." fragment="overview">Overview</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="." fragment="about">About</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="." fragment="skills">Skills</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="." fragment="experience">Experience</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="." fragment="education">Education</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="." fragment="projects">Projects</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="." fragment="certificates">Certificates</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="." fragment="contact">Contact</a></li>
+        @for (section of data().sections; track section.id) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="." [fragment]="section.id">{{ section.label }}</a>
+          </li>
+        }
       </ul>
 
-      <div class="d-flex ms-lg-3 mt-3 mt-lg-0">
+      <div class="d-flex ms-lg-3 mt-3 mt-lg-0 align-items-center gap-2 flex-wrap">
+        @if (data().canEdit && !data().editing) {
+          <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" (click)="edit.emit()">
+            Edytuj profil
+          </button>
+        }
+
+        @if (data().canEdit && data().editing) {
+          <button type="button" class="btn btn-sm btn-primary rounded-pill" (click)="save.emit()" [disabled]="data().saving">
+            {{ data().saving ? 'Zapisywanie...' : 'Zapisz zmiany' }}
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" (click)="cancelEdit.emit()">
+            Anuluj
+          </button>
+        }
+
+        @if (data().isLoggedIn) {
+          <button type="button" class="btn btn-sm btn-outline-dark rounded-pill" (click)="logout.emit()">
+            Wyloguj
+          </button>
+        }
+
         <button type="button" class="theme-toggle-btn" (click)="toggleTheme()" [attr.aria-pressed]="isDark()"
           [title]="isDark() ? 'Switch to light mode' : 'Switch to dark mode'">
           @if (isDark()) {

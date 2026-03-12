@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { HideBrokenImageDirective } from '../../shared/hide-broken-image.directive';
 
 export type OverviewData = {
   name: string;
@@ -9,7 +10,7 @@ export type OverviewData = {
 
 @Component({
   selector: 'app-overview',
-  imports: [],
+  imports: [HideBrokenImageDirective],
   templateUrl: './overview.html',
   styleUrl: './overview.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

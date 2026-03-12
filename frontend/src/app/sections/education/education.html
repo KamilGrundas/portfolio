@@ -9,7 +9,12 @@
           <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
             <div class="d-flex align-items-start gap-3">
               @if (edu.logo_url) {
-              <img class="edu-logo rounded" [src]="edu.logo_url" [alt]="(edu.school || 'School') + ' logo'">
+              <img
+                appHideBrokenImage
+                class="edu-logo rounded"
+                [src]="edu.logo_url"
+                [alt]="(edu.school || 'School') + ' logo'"
+              >
               }
               <div>
                 <h5 class="card-title mb-1">{{ edu.title }}</h5>

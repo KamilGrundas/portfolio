@@ -1,6 +1,7 @@
 import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
+import { AuthService } from './core/services/auth';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +12,10 @@ import { ViewportScroller } from '@angular/common';
 export class App {
   protected readonly title = signal('frontend');
   private scroller = inject(ViewportScroller);
+  private auth = inject(AuthService);
 
   constructor() {
+    this.auth.ensureSession();
     this.scroller.setOffset(() => {
       const nav = document.querySelector('.glass-nav') as HTMLElement | null;
       return [0, (nav?.offsetHeight ?? 0) + 8];

@@ -1,15 +1,12 @@
-<footer class="bg-body-tertiary border-top py-4 mt-5">
-    <div class="container text-center">
-        <div class="mb-3 d-flex justify-content-center flex-wrap gap-3">
-            @for (link of links; track $index) {
-            <a [href]="link.url" [attr.target]="link.external ? '_blank' : null"
-                [attr.rel]="link.external ? 'noopener' : null" class="text-decoration-none link-secondary">
-                {{ link.label }}
-            </a>
-            }
-        </div>
-        <p class="mb-0 text-muted small">
-            © {{ year }} John Doe. All rights reserved.
-        </p>
+<footer class="portfolio-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p class="footer-brand">Portfolio</p>
+      <div class="footer-meta">
+        <span class="footer-status">Available for work</span>
+        <span class="footer-dot" aria-hidden="true"></span>
+        <span class="footer-copy">© {{ year }} Portfolio. All rights reserved.</span>
+      </div>
     </div>
+  </div>
 </footer>

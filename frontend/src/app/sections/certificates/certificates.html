@@ -9,7 +9,12 @@
           <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
             <div class="d-flex align-items-start gap-3">
               @if (c.issuer_logo_url) {
-              <img class="cert-logo rounded" [src]="c.issuer_logo_url" [alt]="(c.issuer || 'Issuer') + ' logo'">
+              <img
+                appHideBrokenImage
+                class="cert-logo rounded"
+                [src]="c.issuer_logo_url"
+                [alt]="(c.issuer || 'Issuer') + ' logo'"
+              >
               }
               <div>
                 <h5 class="card-title mb-1">

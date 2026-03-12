@@ -1,4 +1,5 @@
 import {
+  ContactPublic,
   UserPublic,
   UserDetailsPublic,
   UserSkillsByCategory,
@@ -14,7 +15,7 @@ export const JOHN_DOE_USER: UserPublic = {
   full_name: 'John Doe',
   is_active: true,
   is_superuser: false,
-  url: '',
+  url: 'john_doe',
 };
 
 export const JOHN_DOE_DETAILS: UserDetailsPublic = {
@@ -27,9 +28,19 @@ export const JOHN_DOE_DETAILS: UserDetailsPublic = {
   about:
     "I'm John Doe, a frontend developer with a passion for building modern, performant, and user-friendly applications. I specialize in Angular and TypeScript, and I love working on projects that make a difference.",
   extra:
-    'Beyond coding, I enjoy contributing tśo open source, writing technical articles, and mentoring new developers.',
+    'Beyond coding, I enjoy contributing to open source, writing technical articles, and mentoring new developers.',
   work_station_url:
     'https://www.flexjobs.com/blog/wp-content/uploads/2020/04/20044602/Organize-Workspace.png?w=1024',
+};
+
+export const JOHN_DOE_CONTACT: ContactPublic = {
+  id: 'contact-0',
+  user_id: '0',
+  contact_email: 'john.doe@example.com',
+  phone_number: '+48 600 123 456',
+  linked_in_url: 'https://www.linkedin.com/in/john-doe/',
+  github_url: 'https://github.com/john-doe',
+  location: 'Warsaw, Poland',
 };
 
 export const JOHN_DOE_SKILLS: UserSkillsByCategory[] = [

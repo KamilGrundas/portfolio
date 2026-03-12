@@ -1,10 +1,332 @@
-<app-navbar [data]="navbarData()"></app-navbar>
-<app-overview [data]="overviewData()"></app-overview>
-<app-about [data]="aboutData()"></app-about>
-<app-skills [categories]="skillsData()"></app-skills>
-<app-experience [experiences]="experienceData()"></app-experience>
-<app-education [education]="educationData()"></app-education>
-<app-certificates [certificates]="certificatesData()"></app-certificates>
-<app-projects [projects]="projectsData()"></app-projects>
-<app-contact></app-contact>
+<app-navbar
+  [data]="navbarData()"
+  (edit)="startEditing()"
+  (cancelEdit)="cancelEditing()"
+  (save)="saveAll()"
+  (logout)="logout()"
+></app-navbar>
+
+@if (!editing()) {
+  <app-overview [data]="overviewData()"></app-overview>
+  @if (hasAboutSection()) {
+    <app-about [data]="aboutData()"></app-about>
+  }
+  @if (hasSkillsSection()) {
+    <app-skills [categories]="skillsData()"></app-skills>
+  }
+  @if (hasExperienceSection()) {
+    <app-experience [experiences]="experienceData()"></app-experience>
+  }
+  @if (hasEducationSection()) {
+    <app-education [education]="educationData()"></app-education>
+  }
+  @if (hasCertificatesSection()) {
+    <app-certificates [certificates]="certificatesData()"></app-certificates>
+  }
+  @if (hasProjectsSection()) {
+    <app-projects [projects]="projectsData()"></app-projects>
+  }
+  @if (hasContactSection()) {
+    <app-contact [data]="contact()"></app-contact>
+  }
+} @else {
+  <section id="overview" class="py-5 editor-section">
+    <div class="container">
+      <div class="section-toolbar">
+        <h2>Overview</h2>
+      </div>
+      <div class="editor-card">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Imię i nazwisko</label>
+            <input class="form-control" [(ngModel)]="editableUser.full_name" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Slug URL</label>
+            <input class="form-control" [(ngModel)]="editableUser.url" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Tytuł</label>
+            <input class="form-control" [(ngModel)]="editableDetails.title" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Avatar URL</label>
+            <input class="form-control" [(ngModel)]="editableDetails.avatar" />
+          </div>
+          <div class="col-12">
+            <label class="form-label">Intro</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="editableDetails.intro"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="py-5 editor-section">
+    <div class="container">
+      <div class="section-toolbar">
+        <h2>About</h2>
+      </div>
+      <div class="editor-card">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label">Obrazek stanowiska pracy</label>
+            <input class="form-control" [(ngModel)]="editableDetails.work_station_url" />
+          </div>
+          <div class="col-12">
+            <label class="form-label">Opis główny</label>
+            <textarea class="form-control" rows="5" [(ngModel)]="editableDetails.about"></textarea>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Dodatkowy opis</label>
+            <textarea class="form-control" rows="4" [(ngModel)]="editableDetails.extra"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="py-5 editor-section">
+    <div class="container">
+      <div class="section-toolbar">
+        <h2>Skills</h2>
+        <button class="btn btn-primary btn-sm" type="button" (click)="addSkillCategory()">Dodaj kategorię</button>
+      </div>
+
+      <div class="row g-4">
+        @for (category of editableSkills; track category.id; let categoryIndex = $index) {
+          <div class="col-12 col-lg-6">
+            <div class="editor-card">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <h3 class="editor-subtitle">Kategoria</h3>
+                <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeSkillCategory(categoryIndex)">
+                  Usuń
+                </button>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Nazwa</label>
+                  <input class="form-control" [(ngModel)]="category.name" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Ikona</label>
+                  <input class="form-control" [(ngModel)]="category.icon" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Kolor</label>
+                  <input class="form-control" [(ngModel)]="category.color" />
+                </div>
+              </div>
+
+              <div class="mt-4 d-flex justify-content-between align-items-center">
+                <h4 class="editor-subtitle mb-0">Umiejętności</h4>
+                <button class="btn btn-outline-primary btn-sm" type="button" (click)="addSkill(categoryIndex)">
+                  Dodaj skill
+                </button>
+              </div>
+
+              <div class="mt-3 d-grid gap-2">
+                @for (skill of category.skills; track skill.id; let skillIndex = $index) {
+                  <div class="row g-2 align-items-center">
+                    <div class="col-md-7">
+                      <input class="form-control" [(ngModel)]="skill.name" />
+                    </div>
+                    <div class="col-md-3">
+                      <input class="form-control" type="number" [(ngModel)]="skill.order" />
+                    </div>
+                    <div class="col-md-2">
+                      <button class="btn btn-outline-danger w-100" type="button" (click)="removeSkill(categoryIndex, skillIndex)">
+                        Usuń
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" class="py-5 editor-section">
+    <div class="container">
+      <div class="section-toolbar">
+        <h2>Experience</h2>
+        <button class="btn btn-primary btn-sm" type="button" (click)="addExperience()">Dodaj doświadczenie</button>
+      </div>
+
+      <div class="d-grid gap-4">
+        @for (experience of editableWorkExperience; track experience.id; let experienceIndex = $index) {
+          <div class="editor-card">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <h3 class="editor-subtitle">Stanowisko</h3>
+              <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeExperience(experienceIndex)">
+                Usuń
+              </button>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6"><input class="form-control" placeholder="Rola" [(ngModel)]="experience.role" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Firma" [(ngModel)]="experience.company" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Okres" [(ngModel)]="experience.period" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Lokalizacja" [(ngModel)]="experience.location" /></div>
+              <div class="col-12">
+                <label class="form-label">Powiązane umiejętności</label>
+                <select class="form-select" multiple [(ngModel)]="experience.skillIds">
+                  @for (skill of flattenedSkills(); track skill.id) {
+                    <option [ngValue]="skill.id">{{ skill.name }} · {{ skill.category }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-between align-items-center">
+              <h4 class="editor-subtitle mb-0">Highlights</h4>
+              <button class="btn btn-outline-primary btn-sm" type="button" (click)="addHighlight(experienceIndex)">
+                Dodaj highlight
+              </button>
+            </div>
+
+            <div class="mt-3 d-grid gap-2">
+              @for (highlight of experience.highlights; track highlight.id; let highlightIndex = $index) {
+                <div class="row g-2 align-items-start">
+                  <div class="col-md-10">
+                    <textarea class="form-control" rows="2" [(ngModel)]="highlight.text"></textarea>
+                  </div>
+                  <div class="col-md-2">
+                    <button class="btn btn-outline-danger w-100" type="button" (click)="removeHighlight(experienceIndex, highlightIndex)">
+                      Usuń
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="education" class="py-5 editor-section">
+    <div class="container">
+      <div class="section-toolbar">
+        <h2>Education</h2>
+        <button class="btn btn-primary btn-sm" type="button" (click)="addEducation()">Dodaj edukację</button>
+      </div>
+      <div class="d-grid gap-4">
+        @for (education of editableEducation; track education.id; let index = $index) {
+          <div class="editor-card">
+            <div class="d-flex justify-content-end mb-3">
+              <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeEducation(index)">Usuń</button>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6"><input class="form-control" placeholder="Tytuł" [(ngModel)]="education.title" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Szkoła" [(ngModel)]="education.school" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Okres" [(ngModel)]="education.period" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Lokalizacja" [(ngModel)]="education.location" /></div>
+              <div class="col-12"><input class="form-control" placeholder="Logo URL" [(ngModel)]="education.logo_url" /></div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="certificates" class="py-5 editor-section">
+    <div class="container">
+      <div class="section-toolbar">
+        <h2>Certificates</h2>
+        <button class="btn btn-primary btn-sm" type="button" (click)="addCertificate()">Dodaj certyfikat</button>
+      </div>
+      <div class="d-grid gap-4">
+        @for (certificate of editableCertificates; track certificate.id; let index = $index) {
+          <div class="editor-card">
+            <div class="d-flex justify-content-end mb-3">
+              <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeCertificate(index)">Usuń</button>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6"><input class="form-control" placeholder="Nazwa" [(ngModel)]="certificate.name" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Issuer" [(ngModel)]="certificate.issuer" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Data wydania" [(ngModel)]="certificate.issue_date" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Credential ID" [(ngModel)]="certificate.credential_id" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Logo URL" [(ngModel)]="certificate.issuer_logo_url" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Credential URL" [(ngModel)]="certificate.credential_url" /></div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="py-5 editor-section">
+    <div class="container">
+      <div class="section-toolbar">
+        <h2>Projects</h2>
+        <button class="btn btn-primary btn-sm" type="button" (click)="addProject()">Dodaj projekt</button>
+      </div>
+      <div class="d-grid gap-4">
+        @for (project of editableProjects; track project.id; let index = $index) {
+          <div class="editor-card">
+            <div class="d-flex justify-content-end mb-3">
+              <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeProject(index)">Usuń</button>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6"><input class="form-control" placeholder="Nazwa projektu" [(ngModel)]="project.name" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Repo URL" [(ngModel)]="project.source_code" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Deployment URL" [(ngModel)]="project.deployment_url" /></div>
+              <div class="col-md-6"><input class="form-control" placeholder="Link do zdjęcia" [(ngModel)]="project.imageUrl" /></div>
+              <div class="col-12"><textarea class="form-control" rows="4" placeholder="Opis" [(ngModel)]="project.description"></textarea></div>
+              <div class="col-12">
+                <label class="form-label">Powiązane umiejętności</label>
+                <select class="form-select" multiple [(ngModel)]="project.skillIds">
+                  @for (skill of flattenedSkills(); track skill.id) {
+                    <option [ngValue]="skill.id">{{ skill.name }} · {{ skill.category }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="py-5 editor-section">
+    <div class="container">
+      <div class="section-toolbar">
+        <h2>Contact</h2>
+      </div>
+      <div class="editor-card">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">E-mail</label>
+            <input class="form-control" [(ngModel)]="editableContact.contact_email" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Telefon</label>
+            <input class="form-control" [(ngModel)]="editableContact.phone_number" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">LinkedIn</label>
+            <input class="form-control" [(ngModel)]="editableContact.linked_in_url" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">GitHub</label>
+            <input class="form-control" [(ngModel)]="editableContact.github_url" />
+          </div>
+          <div class="col-12">
+            <label class="form-label">Lokalizacja</label>
+            <input class="form-control" [(ngModel)]="editableContact.location" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+}
+
+@if (error()) {
+  <div class="editor-alert">{{ error() }}</div>
+}
+
 <app-footer></app-footer>

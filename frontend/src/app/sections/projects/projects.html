@@ -8,12 +8,11 @@
                 <article class="card h-100 shadow-sm border-0 hover-card" tabindex="0">
 
                     @if (project.imageUrl) {
-                    <img [src]="project.imageUrl" [alt]="project.name + ' screenshot'"
+                    <img
+                        appHideBrokenImage
+                        [src]="project.imageUrl"
+                        [alt]="project.name + ' screenshot'"
                         class="card-img-top object-fit-cover">
-                    } @else {
-                    <div class="card-img-top placeholder-image d-flex align-items-center justify-content-center">
-                        <span class="placeholder-text">{{ project.name ? project.name.charAt(0) : 'P' }}</span>
-                    </div>
                     }
 
                     <div class="card-body d-flex flex-column gap-3">

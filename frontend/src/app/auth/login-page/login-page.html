@@ -1,0 +1,36 @@
+<section class="login-screen">
+  <div class="login-shell container">
+    <div class="login-intro">
+      <p class="login-kicker">Portfolio Access</p>
+      <h1 class="login-title">Sign in to manage your portfolio.</h1>
+      <p class="login-lead">
+        Update your profile, projects, experience, and public details from one place.
+      </p>
+    </div>
+
+    <form class="login-card" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="login-card-header">
+        <p class="login-card-kicker">Account</p>
+        <h2>Welcome back</h2>
+      </div>
+
+      <label class="login-field">
+        <span>Email</span>
+        <input type="email" formControlName="email" placeholder="you@example.com" />
+      </label>
+
+      <label class="login-field">
+        <span>Password</span>
+        <input type="password" formControlName="password" placeholder="Enter your password" />
+      </label>
+
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+      }
+
+      <button type="submit" [disabled]="loading()">
+        {{ loading() ? 'Signing in...' : 'Sign in' }}
+      </button>
+    </form>
+  </div>
+</section>
