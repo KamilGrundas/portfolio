@@ -7,6 +7,7 @@ from app.api.deps import SessionDep, CurrentUser
 from app.models import (
     WorkExperience,
     WorkExperienceBase,
+    WorkExperienceUpdate,
     WorkExperienceSkillLink,
     Skill,
 )
@@ -80,3 +81,64 @@ def add_skill(
     ).one()
 
     return refreshed
+
+
+@router.patch("/{work_experience_id}", response_model=WorkExperience)
+def update_work_experience(
+    *,
+    session: SessionDep,
+    current_user: CurrentUser,
+    work_experience_id: str,
+    work_experience_in: WorkExperienceUpdate,
+) -> Any:
+    """
+    Update current user's work experience.
+    """
+    work_experience = session.get(WorkExperience, work_experience_id)
+    if not work_experience:
+        raise HTTPException(status_code=404, detail="Work experience not found")
+    if work_experience.owner_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not allowed")
+
+    payload = work_experience_in.model_dump(exclude_unset=True, exclude={"skill_ids"})
+    work_experience.sqlmodel_update(payload)
+    session.add(work_experience)
+
+    if work_experience_in.skill_ids is not None:
+        user_skills = session.exec(
+            select(Skill).where(
+                col(Skill.owner_id) == current_user.id,
+                col(Skill.id).in_(work_experience_in.skill_ids),
+            )
+        ).all()
+        if len(user_skills) != len(set(work_experience_in.skill_ids)):
+            raise HTTPException(
+                status_code=400, detail="One or more skills are invalid"
+            )
+        work_experience.skills = user_skills
+        session.add(work_experience)
+
+    session.commit()
+    session.refresh(work_experience)
+    return work_experience
+
+
+@router.delete("/{work_experience_id}")
+def delete_work_experience(
+    *,
+    session: SessionDep,
+    current_user: CurrentUser,
+    work_experience_id: str,
+) -> Any:
+    """
+    Delete current user's work experience.
+    """
+    work_experience = session.get(WorkExperience, work_experience_id)
+    if not work_experience:
+        raise HTTPException(status_code=404, detail="Work experience not found")
+    if work_experience.owner_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not allowed")
+
+    session.delete(work_experience)
+    session.commit()
+    return {"ok": True}

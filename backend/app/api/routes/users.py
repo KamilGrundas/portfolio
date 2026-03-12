@@ -14,15 +14,20 @@ from app.models import (
     User,
     UsersPublic,
     UserPublic,
+    UserUpdateMe,
     UserDetails,
     UserDetailsUpdate,
     UserDetailsPublic,
     Skill,
+    Contact,
+    ContactPublic,
+    ContactUpdate,
     SkillWithCategory,
     SkillCategoryPublic,
     UserWorkExperience,
     WorkExperience,
     ExperienceHighlight,
+    ExperienceHighlightPublic,
     UserSkillsByCategory,
     SkillCategory,
     Education,
@@ -62,6 +67,23 @@ def read_user_me(current_user: CurrentUser) -> Any:
     return current_user
 
 
+@router.patch("/me", response_model=UserPublic)
+def update_user_me(
+    user_in: UserUpdateMe,
+    session: SessionDep,
+    current_user: CurrentUser,
+) -> Any:
+    """
+    Update current user.
+    """
+    payload = user_in.model_dump(exclude_unset=True)
+    current_user.sqlmodel_update(payload)
+    session.add(current_user)
+    session.commit()
+    session.refresh(current_user)
+    return current_user
+
+
 @router.get("/me/details", response_model=UserDetailsPublic)
 def read_my_details(session: SessionDep, current_user: CurrentUser) -> Any:
     """
@@ -75,6 +97,43 @@ def read_my_details(session: SessionDep, current_user: CurrentUser) -> Any:
         raise HTTPException(status_code=404, detail="User details not found")
 
     return db_user.details
+
+
+@router.get("/me/contact", response_model=ContactPublic)
+def read_my_contact(session: SessionDep, current_user: CurrentUser) -> Any:
+    """
+    Get current user's contact details.
+    """
+    statement = select(Contact).where(col(Contact.user_id) == current_user.id)
+    contact = session.exec(statement).first()
+    if not contact:
+        raise HTTPException(status_code=404, detail="User contact not found")
+    return contact
+
+
+@router.patch("/me/contact", response_model=ContactPublic)
+def upsert_my_contact(
+    contact_in: ContactUpdate,
+    session: SessionDep,
+    current_user: CurrentUser,
+) -> Any:
+    """
+    Create or update current user's contact details.
+    """
+    payload = contact_in.model_dump(exclude_unset=True)
+    statement = select(Contact).where(col(Contact.user_id) == current_user.id)
+    contact = session.exec(statement).first()
+
+    if contact is None:
+        contact = Contact(user_id=current_user.id, **payload)
+    else:
+        for key, value in payload.items():
+            setattr(contact, key, value)
+
+    session.add(contact)
+    session.commit()
+    session.refresh(contact)
+    return contact
 
 
 @router.get("/by-id/{user_id}", response_model=UserPublic)
@@ -212,8 +271,17 @@ def get_user_skills(
                 "color": category.color,
                 "order": category.order or 0,
                 "skills": [
-                    {"id": s.id, "name": s.name}
-                    for s in sorted(user_skills, key=lambda x: x.name.lower())
+                    {
+                        "id": s.id,
+                        "name": s.name,
+                        "category_id": s.category_id,
+                        "order": s.order or 0,
+                        "owner_id": s.owner_id,
+                    }
+                    for s in sorted(
+                        user_skills,
+                        key=lambda x: ((x.order or 0), x.name.lower()),
+                    )
                 ],
             }
         )
@@ -273,11 +341,19 @@ def get_user_work_experiences(
 
         result.append(
             UserWorkExperience(
+                id=exp.id,
                 company=exp.company or "",
                 role=exp.role or "",
                 period=exp.period or "",
                 location=exp.location or "",
-                highlights=highlights,  # type: ignore
+                highlights=[
+                    ExperienceHighlightPublic(
+                        id=highlight.id,
+                        text=highlight.text,
+                        work_experience_id=highlight.work_experience_id,
+                    )
+                    for highlight in highlights
+                ],
                 skills=skills_with_cat,
             )
         )
@@ -319,6 +395,25 @@ def get_user_certificates(
     ).all()
 
     return certificates
+
+
+@router.get(
+    "/get-user-contact",
+    response_model=ContactPublic,
+)
+def get_user_contact(
+    session: SessionDep,
+    user_id: uuid.UUID,
+) -> Any:
+    """
+    Get user's contact details.
+    """
+    contact = session.exec(
+        select(Contact).where(col(Contact.user_id) == user_id)
+    ).first()
+    if not contact:
+        raise HTTPException(status_code=404, detail="User contact not found")
+    return contact
 
 
 @router.get(
@@ -367,9 +462,11 @@ def get_user_projects(
 
         result.append(
             UserProjects(
+                id=proj.id,
                 name=proj.name or "",
                 source_code=proj.source_code or "",
                 deployment_url=proj.deployment_url,
+                image_url=proj.image_url,
                 description=proj.description,
                 skills=skills_with_cat,
             )

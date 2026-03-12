@@ -52,6 +52,7 @@ class UserUpdate(UserBase):
 class UserUpdateMe(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
     email: EmailStr | None = Field(default=None, max_length=255)
+    url: str | None = Field(default=None, max_length=255)
 
 
 class UpdatePassword(SQLModel):
@@ -185,6 +186,11 @@ class SkillUpdate(SQLModel):
     order: int | None = Field(default=None)
 
 
+class SkillPublic(SkillBase):
+    id: uuid.UUID
+    owner_id: uuid.UUID | None
+
+
 class SkillCategoryUpdate(SQLModel):
     name: str | None = Field(default=None, max_length=100)
     icon: str | None = Field(default=None, max_length=100)
@@ -198,7 +204,7 @@ class UserSkillsByCategory(SQLModel):
     icon: str | None
     color: str | None
     order: int
-    skills: list[SkillBase] = []
+    skills: list[SkillPublic] = []
 
 
 class ExperienceHighlightBase(SQLModel):
@@ -210,6 +216,14 @@ class ExperienceHighlightBase(SQLModel):
 
 class ExperienceHighlight(ExperienceHighlightBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+
+
+class ExperienceHighlightUpdate(SQLModel):
+    text: str | None = None
+
+
+class ExperienceHighlightPublic(ExperienceHighlightBase):
+    id: uuid.UUID
 
 
 class WorkExperienceBase(SQLModel):
@@ -229,6 +243,14 @@ class WorkExperience(WorkExperienceBase, table=True):
     )
 
 
+class WorkExperienceUpdate(SQLModel):
+    company: str | None = Field(default=None, max_length=255)
+    role: str | None = Field(default=None, max_length=100)
+    period: str | None = Field(default=None, max_length=100)
+    location: str | None = Field(default=None, max_length=100)
+    skill_ids: list[uuid.UUID] | None = None
+
+
 class SkillCategoryPublic(SkillCategoryBase):
     id: uuid.UUID
 
@@ -241,11 +263,12 @@ class SkillWithCategory(SQLModel):
 
 
 class UserWorkExperience(SQLModel):
+    id: uuid.UUID
     company: str
     role: str
     period: str
     location: str
-    highlights: list[ExperienceHighlight] = []
+    highlights: list[ExperienceHighlightPublic] = []
     skills: list[SkillWithCategory] = []
 
 
@@ -264,7 +287,15 @@ class Education(EducationBase, table=True):
 
 
 class EducationCreate(EducationBase):
-    owner_id: uuid.UUID
+    owner_id: uuid.UUID | None = None
+
+
+class EducationUpdate(SQLModel):
+    school: str | None = Field(default=None, max_length=255)
+    title: str | None = Field(default=None, max_length=100)
+    period: str | None = Field(default=None, max_length=100)
+    location: str | None = Field(default=None, max_length=100)
+    logo_url: str | None = Field(default=None, max_length=255)
 
 
 class EducationPublic(EducationBase):
@@ -288,7 +319,16 @@ class Certificate(CertificateBase, table=True):
 
 
 class CertificateCreate(CertificateBase):
-    owner_id: uuid.UUID
+    owner_id: uuid.UUID | None = None
+
+
+class CertificateUpdate(SQLModel):
+    name: str | None = Field(default=None, max_length=255)
+    issuer: str | None = Field(default=None, max_length=255)
+    issuer_logo_url: str | None = Field(default=None, max_length=255)
+    issue_date: str | None = Field(default=None, max_length=100)
+    credential_id: str | None = Field(default=None, max_length=100)
+    credential_url: str | None = Field(default=None, max_length=255)
 
 
 class CertificatePublic(CertificateBase):
@@ -300,6 +340,7 @@ class ProjectBase(SQLModel):
     name: str = Field(default=None, max_length=255)
     source_code: str = Field(default=None, max_length=255)
     deployment_url: str | None = Field(default=None, max_length=255)
+    image_url: str | None = Field(default=None, max_length=255)
     description: str | None = Field(default=None, sa_column=Column(Text))
 
 
@@ -314,7 +355,16 @@ class Project(ProjectBase, table=True):
 
 
 class ProjectCreate(ProjectBase):
-    owner_id: uuid.UUID
+    owner_id: uuid.UUID | None = None
+
+
+class ProjectUpdate(SQLModel):
+    name: str | None = Field(default=None, max_length=255)
+    source_code: str | None = Field(default=None, max_length=255)
+    deployment_url: str | None = Field(default=None, max_length=255)
+    image_url: str | None = Field(default=None, max_length=255)
+    description: str | None = None
+    skill_ids: list[uuid.UUID] | None = None
 
 
 class ProjectPublic(ProjectBase):
@@ -323,9 +373,11 @@ class ProjectPublic(ProjectBase):
 
 
 class UserProjects(SQLModel):
+    id: uuid.UUID
     name: str
     source_code: str
     deployment_url: str | None
+    image_url: str | None
     description: str | None
     skills: list[SkillWithCategory] = []
 
@@ -348,7 +400,15 @@ class Contact(ContactBase, table=True):
 
 
 class ContactCreate(ContactBase):
-    user_id: uuid.UUID
+    user_id: uuid.UUID | None = None
+
+
+class ContactUpdate(SQLModel):
+    contact_email: EmailStr | None = Field(default=None, max_length=255)
+    phone_number: str | None = Field(default=None, max_length=20)
+    linked_in_url: str | None = Field(default=None, max_length=255)
+    github_url: str | None = Field(default=None, max_length=255)
+    location: str | None = Field(default=None, max_length=255)
 
 
 class ContactPublic(ContactBase):

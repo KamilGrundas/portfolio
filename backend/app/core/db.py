@@ -1,3 +1,4 @@
+from sqlalchemy import text
 from sqlmodel import Session, create_engine, select
 
 from app import crud
@@ -20,6 +21,10 @@ def init_db(session: Session) -> None:
 
     # This works because the models are already imported and registered from app.models
     SQLModel.metadata.create_all(engine)
+    session.exec(
+        text("ALTER TABLE project ADD COLUMN IF NOT EXISTS image_url VARCHAR(255)")
+    )
+    session.commit()
 
     user = session.exec(
         select(User).where(User.email == settings.FIRST_SUPERUSER)
