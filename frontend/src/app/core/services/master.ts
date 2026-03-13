@@ -27,7 +27,7 @@ import {
   ProjectCreate,
   ProjectUpdate,
 } from '../../types';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
