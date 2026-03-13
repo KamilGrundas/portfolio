@@ -7,6 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 
@@ -21,6 +22,7 @@ export class LoginPage {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly title = inject(Title);
 
   readonly error = signal<string | null>(null);
   readonly loading = this.auth.loading;
@@ -34,6 +36,7 @@ export class LoginPage {
 
   constructor() {
     this.auth.ensureSession();
+    this.title.setTitle('Portfolio Creator');
     effect(() => {
       if (this.hasSession()) {
         void this.redirectToPortfolio();
@@ -57,7 +60,7 @@ export class LoginPage {
           this.error.set('This account does not have a portfolio URL configured.');
           return;
         }
-        void this.router.navigate(['/portfolio', currentUser.url]);
+        void this.router.navigate(['/', currentUser.url]);
       },
       error: () => {
         this.error.set('Incorrect email or password.');
@@ -68,7 +71,7 @@ export class LoginPage {
   private async redirectToPortfolio(): Promise<void> {
     const user = this.currentUser();
     if (user?.url) {
-      await this.router.navigate(['/portfolio', user.url]);
+      await this.router.navigate(['/', user.url]);
     }
   }
 }

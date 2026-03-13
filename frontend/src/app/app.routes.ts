@@ -4,6 +4,6 @@ import { LoginPage } from './auth/login-page/login-page';
 
 export const routes: Routes = [
   { path: '', component: LoginPage },
-  { path: 'portfolio/:user_url', component: PortfolioShell },
+  { path: ':user_url', component: PortfolioShell },
   { path: '**', redirectTo: '' },
 ];

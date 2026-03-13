@@ -3,10 +3,12 @@ import {
   Component,
   DestroyRef,
   computed,
+  effect,
   inject,
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, forkJoin, of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
@@ -88,6 +90,7 @@ export class PortfolioShell {
   private readonly api = inject(Master);
   private readonly auth = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly title = inject(Title);
 
   user = signal<UserPublic>(this.emptyUser(''));
   details = signal<UserDetailsPublic>(this.emptyDetails(''));
@@ -203,6 +206,11 @@ export class PortfolioShell {
   );
 
   constructor() {
+    effect(() => {
+      const fullName = this.user().full_name?.trim();
+      this.title.setTitle(fullName ? `${fullName} - portfolio` : 'Portfolio');
+    });
+
     this.route.paramMap
       .pipe(
         map((pm) => pm.get('user_url')!),
@@ -449,7 +457,7 @@ export class PortfolioShell {
       }
 
       if (nextUrl && nextUrl !== previousUrl) {
-        await this.router.navigate(['/portfolio', nextUrl]);
+        await this.router.navigate(['/', nextUrl]);
       }
     } catch (err) {
       console.error(err);
@@ -1134,7 +1142,7 @@ export class PortfolioShell {
       this.editing.set(true);
     }
     if (navigateToUrl && navigateToUrl !== this.route.snapshot.paramMap.get('user_url')) {
-      await this.router.navigate(['/portfolio', navigateToUrl]);
+      await this.router.navigate(['/', navigateToUrl]);
     }
   }
 
