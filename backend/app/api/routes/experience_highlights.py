@@ -16,7 +16,7 @@ from app.models import (
 router = APIRouter(prefix="/experience-highlights", tags=["experience-highlights"])
 
 
-@router.post("/", response_model=ExperienceHighlight)
+@router.post("", response_model=ExperienceHighlight)
 def create_experience_highlight(
     *,
     session: SessionDep,

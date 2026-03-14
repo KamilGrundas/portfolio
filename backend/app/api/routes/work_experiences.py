@@ -16,7 +16,7 @@ from app.models import (
 router = APIRouter(prefix="/work-experiences", tags=["work-experiences"])
 
 
-@router.post("/", response_model=WorkExperience)
+@router.post("", response_model=WorkExperience)
 def create_work_experience(
     *,
     session: SessionDep,

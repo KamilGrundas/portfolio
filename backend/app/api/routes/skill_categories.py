@@ -18,7 +18,7 @@ from app.models import (
 router = APIRouter(prefix="/skill-categories", tags=["skill-categories"])
 
 
-@router.post("/", response_model=SkillCategory)
+@router.post("", response_model=SkillCategory)
 def create_skill_category(
     *,
     session: SessionDep,
@@ -35,7 +35,7 @@ def create_skill_category(
     return skill_category
 
 
-@router.get("/", response_model=list[SkillCategory])
+@router.get("", response_model=list[SkillCategory])
 def read_skill_categories(session: SessionDep) -> Any:
     """
     Retrieve skill categories.

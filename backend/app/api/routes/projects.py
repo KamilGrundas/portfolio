@@ -16,7 +16,7 @@ from app.models import (
 router = APIRouter(prefix="/projects", tags=["projects"])
 
 
-@router.post("/", response_model=Project)
+@router.post("", response_model=Project)
 def create_project(
     *,
     session: SessionDep,

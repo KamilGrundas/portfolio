@@ -17,7 +17,7 @@ from app.models import (
 router = APIRouter(prefix="/education", tags=["education"])
 
 
-@router.post("/", response_model=Education)
+@router.post("", response_model=Education)
 def create_education(
     *,
     session: SessionDep,

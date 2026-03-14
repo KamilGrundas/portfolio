@@ -18,7 +18,7 @@ from app.models import (
 router = APIRouter(prefix="/skills", tags=["skills"])
 
 
-@router.post("/", response_model=Skill)
+@router.post("", response_model=Skill)
 def create_skill(
     *, session: SessionDep, current_user: CurrentUser, skill_in: SkillCreate
 ) -> Any:

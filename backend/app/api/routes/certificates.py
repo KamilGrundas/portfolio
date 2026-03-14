@@ -17,7 +17,7 @@ from app.models import (
 router = APIRouter(prefix="/certificates", tags=["certificates"])
 
 
-@router.post("/", response_model=Certificate)
+@router.post("", response_model=Certificate)
 def create_certificate(
     *,
     session: SessionDep,
